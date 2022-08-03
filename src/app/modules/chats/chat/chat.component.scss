@@ -1,0 +1,44 @@
+@import '~@angular/material/theming';
+
+@mixin theme-color-grabber($theme) {
+
+  $primary: map-get($theme, primary);
+  $accent: map-get($theme, accent);
+  $warn: map-get($theme, warn);
+
+  .primaryColorBG {
+    background-color: mat-color($primary);
+  }
+  .accentColorBG {
+    background-color: mat-color($accent);
+  }
+  .warnColorBG {
+    background-color: mat-color($warn);
+  }
+}
+
+.chat-container {
+  padding: 1em;
+}
+
+.chat-header {
+  display: flex;
+  flex-wrap: nowrap;
+  align-items: baseline;
+  padding: 0.5em;
+}
+
+.chat-header-image {
+  background-image: url("https://i.pinimg.com/736x/62/3e/c7/623ec7d4bca8e551d3bc6f681180c1ee.jpg");
+  background-size: cover;
+}
+
+.chat-header-name {
+  flex-grow: 1;
+}
+
+.general-chat {
+  background: #ffffff;
+  color: black
+}
+
