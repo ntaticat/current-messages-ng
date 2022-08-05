@@ -1,26 +1,65 @@
 <div class="chat-container">
-  <div>
+  <div class="chat">
     <!-- nombre de amigo del chat -->
-    <div>
-      <img src="" alt="">
-      <p>Rafael Estrada</p>
-      <p>Info extra</p>
+    <div class="chat-header">
+      <div class="chat-header-user">
+        <img class="chat-header-image" src="https://i.pinimg.com/736x/62/3e/c7/623ec7d4bca8e551d3bc6f681180c1ee.jpg" alt="">
+        <div class="chat-header-name-container">
+          <p *ngFor="let user of chatData.users" class="chat-header-name">
+            <span *ngIf="user.userId !== userId">
+              {{ user.name }}
+            </span>
+          </p>
+          <p>Info extra</p>
+        </div>
+      </div>
+      <button class="chat-header-close">&#10005;</button>
     </div>
     <!-- Chat -->
-    <ul class="general-chat">
-      <li role="listitem">Mensajes enviados 1</li>
-      <li role="listitem">Mensajes enviados 2</li>
-      <li role="listitem">Mensajes enviados 3</li>
-    </ul>
+    <div class="chat-messages-container">
+      <ul class="chat-messages">
+        <ng-container *ngFor="let chatMessage of chatData.messages">
+          <div *ngIf="userId === chatMessage.userId; else FriendChatMessageContainer" class="chat-message chat-message-mine-container">
+            <li class="chat-message-mine">{{ chatMessage.messageText }}</li>
+          </div>
+
+          <ng-template #FriendChatMessageContainer class="chat-message chat-message-friend-container">
+            <li class="chat-message-friend">{{ chatMessage.messageText }}</li>
+          </ng-template>
+        </ng-container>
+      </ul>
+    </div>
+
+    <div class="chat-current-messages-show-container">
+      <button class="chat-current-messages-show">Mensajes Frecuentes</button>
+    </div>
     <!-- MensajesFrecuentes -->
-    <ul>
-      <li role="listitem">Item 1</li>
-      <li role="listitem">Item 2</li>
-      <li role="listitem">Item 3</li>
+    <ul class="chat-current-messages">
+      <li>
+        <button class="chat-current-message chat-current-message-selected">Selected Item</button>
+      </li>
+      <li>
+        <button class="chat-current-message">Item 1</button>
+      </li>
+      <li>
+        <button class="chat-current-message">Item 1</button>
+      </li>
+      <li>
+        <button class="chat-current-message">Item 1</button>
+      </li>
+      <li>
+        <button class="chat-current-message">Item 1</button>
+      </li>
+      <li>
+        <button class="chat-current-message">Item 1</button>
+      </li>
+      <li>
+        <button class="chat-current-message">Item 1</button>
+      </li>
     </ul>
     <!-- Enviar -->
-    <div class="">
-      <button>Enviar mensaje</button>
+    <div class="button-send-container">
+      <button class="button-send">Enviar mensaje</button>
     </div>
   </div>
 </div>

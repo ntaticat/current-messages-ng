@@ -1,44 +1,148 @@
-@import '~@angular/material/theming';
-
-@mixin theme-color-grabber($theme) {
-
-  $primary: map-get($theme, primary);
-  $accent: map-get($theme, accent);
-  $warn: map-get($theme, warn);
-
-  .primaryColorBG {
-    background-color: mat-color($primary);
-  }
-  .accentColorBG {
-    background-color: mat-color($accent);
-  }
-  .warnColorBG {
-    background-color: mat-color($warn);
-  }
+.chat-container {
+  background: rgba(104, 214, 30, 0.918);
 }
 
-.chat-container {
-  padding: 1em;
+.chat {
+  background: #ffffff;
+  color: black;
 }
 
 .chat-header {
   display: flex;
   flex-wrap: nowrap;
-  align-items: baseline;
+  align-items: center;
+  background: #000;
+  color: white;
+}
+
+.chat-header-user {
+  flex-grow: 1;
+  display: flex;
+  flex-wrap: nowrap;
+  align-items: center;
   padding: 0.5em;
 }
 
-.chat-header-image {
-  background-image: url("https://i.pinimg.com/736x/62/3e/c7/623ec7d4bca8e551d3bc6f681180c1ee.jpg");
-  background-size: cover;
+.chat-header-close {
+  background: rgb(255, 0, 0);
+  color: #fff;
+  border-radius: 50%;
+  width: 2em;
+  height: 2em;
+  text-align: center;
 }
 
-.chat-header-name {
+.chat-header-image {
+  width: 3em;
+  height: 3em;
+  object-fit: cover;
+  object-position: center;
+  border-radius: 50%;
+  margin-right: 0.5em;
+}
+
+.chat-header-name-container {
   flex-grow: 1;
 }
 
-.general-chat {
-  background: #ffffff;
-  color: black
+.chat-messages-container {
+  height: 40vh;
+  width: 100%;
+  overflow: auto;
 }
 
+.chat-messages {
+  width: 100%;
+  height: auto;
+  padding: 0.25em;
+  box-sizing: border-box;
+
+}
+
+
+
+.chat-message {
+  margin-bottom: 0.25em;
+  box-sizing: border-box;
+  &:last-child {
+    margin-bottom: 0;
+  }
+}
+
+.chat-message-mine-container {
+  display: flex;
+  justify-content: flex-end;
+  width: 100%;
+  height: auto;
+}
+
+.chat-message-mine {
+  background: rgb(28, 105, 219);
+  color: white;
+  border-radius: 0.5em 0.5em 0 0.5em;
+  padding: 0.5em;
+  max-width: 75%;
+  height: auto;
+}
+
+.chat-message-friend-container {
+  width: 100%;
+  height: auto;
+  display: flex;
+  justify-content: flex-start;
+}
+
+.chat-message-friend {
+  background: rgb(219, 28, 28);
+  color: white;
+  border-radius: 0.5em 0.5em 0.5em 0;
+  padding: 0.5em;
+  max-width: 75%;
+  height: auto;
+}
+
+.chat-current-messages-show {
+  width: 100%;
+  border-top-left-radius: 1em;
+  border-top-right-radius: 1em;
+  padding: 0.5em;
+  background: rgb(0, 68, 214);
+  color: #fff;
+}
+
+.chat-current-messages {
+  background: rgb(170, 170, 170);
+  padding: 0.25em 0.5em;
+  max-height: 30vh;
+  overflow: auto;
+}
+
+.chat-current-message {
+  width: 100%;
+  background: white;
+  color: black;
+  text-align: center;
+  padding: 0.5em;
+}
+
+.chat-current-message-selected {
+  background: rgb(197, 28, 28);
+  color: white;
+}
+
+
+
+
+
+.button-send-container {
+  padding: 0.5em 1em;
+  background: #000;
+}
+
+.button-send {
+  padding: 0.5em 0.75em;
+  border-radius: 0.75em;
+  width: 100%;
+  background-color: blue;
+  color: white;
+}
