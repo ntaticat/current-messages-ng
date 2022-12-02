@@ -1,7 +1,7 @@
 import { environment } from './../../../environments/environment';
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { IChat } from '../interfaces/chat.interfaces';
+import { IChat, IChatMessagePost } from '../interfaces/chat.interfaces';
 import { Observable } from 'rxjs';
 
 @Injectable({
@@ -17,5 +17,15 @@ export class ApiService {
     const path = `${this.apiUrl}/chats/${id}`;
 
     return this.http.get<IChat>(path);
+  }
+
+  postMessageChat(messageData: IChatMessagePost): Observable<{}> {
+    const path = `${this.apiUrl}/chatMessages`;
+
+    const body = {
+      ...messageData
+    };
+
+    return this.http.post(path, body);
   }
 }

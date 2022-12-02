@@ -17,3 +17,10 @@ export interface IUser {
   name: string;
   chats: IChat[];
 }
+
+export interface IChatMessagePost {
+  messageText: string;
+  userId: string;
+  chatOwnerId: string;
+  setAsCurrentMessage: boolean;
+}

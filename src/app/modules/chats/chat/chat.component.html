@@ -59,7 +59,11 @@
     </ul>
     <!-- Enviar -->
     <div class="button-send-container">
-      <button class="button-send">Enviar mensaje</button>
+      <div class="message-text-container">
+        <input class="message-text" type="text" [(ngModel)]="messageText" name="" id="" placeholder="Escribe tu mensaje aquí...">
+        <button class="message-current-setbutton" (click)="onClickToggleSetCurrentMessage()"><fa-icon [icon]="faFloppyDisk"></fa-icon></button>
+      </div>
+      <button class="button-send" (click)="onSubmitPostMessage()">Enviar mensaje</button>
     </div>
   </div>
 </div>
