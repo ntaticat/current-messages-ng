@@ -24,3 +24,9 @@ export interface IChatMessagePost {
   chatOwnerId: string;
   setAsCurrentMessage: boolean;
 }
+
+export interface ICurrentMessage {
+  currentMessageId: string;
+  messageText: string;
+  userId: string;
+}

@@ -3,7 +3,11 @@
     <!-- nombre de amigo del chat -->
     <div class="chat-header">
       <div class="chat-header-user">
-        <img class="chat-header-image" src="https://i.pinimg.com/736x/62/3e/c7/623ec7d4bca8e551d3bc6f681180c1ee.jpg" alt="">
+        <img
+          class="chat-header-image"
+          src="https://i.pinimg.com/736x/62/3e/c7/623ec7d4bca8e551d3bc6f681180c1ee.jpg"
+          alt=""
+        />
         <div class="chat-header-name-container">
           <p *ngFor="let user of chatData.users" class="chat-header-name">
             <span *ngIf="user.userId !== userId">
@@ -19,11 +23,20 @@
     <div class="chat-messages-container">
       <ul class="chat-messages">
         <ng-container *ngFor="let chatMessage of chatData.messages">
-          <div *ngIf="userId === chatMessage.userId; else FriendChatMessageContainer" class="chat-message chat-message-mine-container">
+          <div
+            *ngIf="
+              userId.toLowerCase() === chatMessage.userId.toLowerCase();
+              else FriendChatMessageContainer
+            "
+            class="chat-message chat-message-mine-container"
+          >
             <li class="chat-message-mine">{{ chatMessage.messageText }}</li>
           </div>
 
-          <ng-template #FriendChatMessageContainer class="chat-message chat-message-friend-container">
+          <ng-template
+            #FriendChatMessageContainer
+            class="chat-message chat-message-friend-container"
+          >
             <li class="chat-message-friend">{{ chatMessage.messageText }}</li>
           </ng-template>
         </ng-container>
@@ -35,35 +48,37 @@
     </div>
     <!-- MensajesFrecuentes -->
     <ul class="chat-current-messages">
-      <li>
-        <button class="chat-current-message chat-current-message-selected">Selected Item</button>
-      </li>
-      <li>
-        <button class="chat-current-message">Item 1</button>
-      </li>
-      <li>
-        <button class="chat-current-message">Item 1</button>
-      </li>
-      <li>
-        <button class="chat-current-message">Item 1</button>
-      </li>
-      <li>
-        <button class="chat-current-message">Item 1</button>
-      </li>
-      <li>
-        <button class="chat-current-message">Item 1</button>
-      </li>
-      <li>
-        <button class="chat-current-message">Item 1</button>
+      <li *ngFor="let currentMessage of currentMessages">
+        <button
+          (click)="onClickCurrentMessage(currentMessage.messageText)"
+          class="chat-current-message chat-current-message-selected"
+        >
+          {{ currentMessage.messageText }}
+        </button>
       </li>
     </ul>
     <!-- Enviar -->
     <div class="button-send-container">
       <div class="message-text-container">
-        <input class="message-text" type="text" [(ngModel)]="messageText" name="" id="" placeholder="Escribe tu mensaje aquí...">
-        <button class="message-current-setbutton" (click)="onClickToggleSetCurrentMessage()"><fa-icon [icon]="faFloppyDisk"></fa-icon></button>
+        <input
+          class="message-text"
+          type="text"
+          [(ngModel)]="messageText"
+          name=""
+          id=""
+          placeholder="Escribe tu mensaje aquí..."
+        />
+        <button
+          [ngClass]="{ 'as-currentmessage-true': setAsCurrentMessage }"
+          class="message-current-setbutton"
+          (click)="onClickToggleSetCurrentMessage()"
+        >
+          <fa-icon [icon]="faFloppyDisk"></fa-icon>
+        </button>
       </div>
-      <button class="button-send" (click)="onSubmitPostMessage()">Enviar mensaje</button>
+      <button class="button-send" (click)="onSubmitPostMessage()">
+        Enviar mensaje
+      </button>
     </div>
   </div>
 </div>

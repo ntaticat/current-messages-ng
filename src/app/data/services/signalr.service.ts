@@ -23,7 +23,7 @@ export class SignalrService {
         .build();
 
       await this.hubConnection.start();
-      console.log('Connection started');
+      console.info('Connection started');
     }
     catch (error) {
       console.error('Error while starting connection: ' + error)
@@ -38,6 +38,7 @@ export class SignalrService {
 
   closeConnection() {
     this.hubConnection.stop();
+    console.info('Connection stopped');
   }
 
 }
