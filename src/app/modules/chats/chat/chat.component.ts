@@ -18,7 +18,7 @@ import { faFloppyDisk } from '@fortawesome/free-solid-svg-icons';
 export class ChatComponent implements OnInit, OnDestroy {
   faFloppyDisk = faFloppyDisk;
 
-  userId: string = '13d25d22-dc6a-4dee-8f79-08dad582787d';
+  userId: string = 'C7A19BC8-A69B-4130-E51E-08DE65F70AA6';
   chatId: string = '';
   chatData: IChat = {
     chatId: '',
@@ -36,31 +36,57 @@ export class ChatComponent implements OnInit, OnDestroy {
   constructor(
     private api: ApiService,
     private route: ActivatedRoute,
-    private signalr: SignalrService
+    private signalr: SignalrService,
   ) {}
 
-  ngOnInit(): void {
-    this.signalr.startConnection();
-    this.signalr.sendChatMessageListener();
+  async ngOnInit() {
+    this.signalr.initHubConnection();
+
     this.signalr.newChatMessage$.subscribe((chatMessageData) => {
+      console.log('SE EMITIO NEWCHATMESSAGE$');
       if (chatMessageData) {
         this.chatData.messages.push(chatMessageData);
         this.getCurrentMessages();
       }
     });
 
-    this.route.paramMap.subscribe((paramMap) => {
-      this.chatId = paramMap.get('id')!;
-      this.api.getChat(this.chatId).subscribe((chatData) => {
-        this.chatData = chatData;
+    try {
+      await this.signalr.startConnection();
+      console.log('SIGNALR CONECTADO');
+      this.signalr.sendChatMessageListener();
+
+      this.route.paramMap.subscribe(async (paramMap) => {
+        const newChatId = paramMap.get('id')!;
+
+        if (this.chatId && this.chatId !== newChatId) {
+          this.signalr.HubConnection.invoke('LeaveChat', this.chatId);
+        }
+
+        this.chatId = newChatId;
+        await this.joinGroup();
+
+        this.api.getChat(this.chatId).subscribe((chatData) => {
+          this.chatData = chatData;
+        });
+        this.getCurrentMessages();
       });
-      this.getCurrentMessages();
-    });
+    } catch (error) {
+      console.error('Error conectando a SIGNALR: ', error);
+    }
+  }
+
+  private async joinGroup() {
+    if (this.chatId) {
+      console.log('JOIN GROUP CHATID', this.chatId);
+      await this.signalr.HubConnection.invoke('JoinChat', this.chatId).catch(
+        (err) => console.error('Error al unirse al grupo', err),
+      );
+    }
   }
 
   getCurrentMessages() {
     this.api.getCurrentMessages(this.userId).subscribe((currentMessages) => {
-      if (!currentMessages) {
+      if (currentMessages) {
         this.currentMessages = currentMessages;
       }
     });

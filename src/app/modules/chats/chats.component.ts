@@ -5,22 +5,19 @@ import { ApiService } from 'src/app/data/services/api.service';
 @Component({
   selector: 'app-chats',
   templateUrl: './chats.component.html',
-  styleUrls: ['./chats.component.scss']
+  styleUrls: ['./chats.component.scss'],
 })
 export class ChatsComponent implements OnInit {
-
-  userId = "13D25D22-DC6A-4DEE-8F79-08DAD582787D";
+  userId = 'C7A19BC8-A69B-4130-E51E-08DE65F70AA6';
   chatList: IChat[] = [];
 
-  constructor(private api: ApiService) { }
+  constructor(private api: ApiService) {}
 
   ngOnInit(): void {
     this.api.getChats(this.userId).subscribe((chats) => {
-      if(chats != null) {
+      if (chats != null) {
         this.chatList = chats;
       }
     });
-
   }
-
 }
