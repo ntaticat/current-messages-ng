@@ -1,4 +1,4 @@
-<div *ngFor="let chat of chatList">
+<div *ngFor="let chat of chats">
   <p>{{ chat.chatId }}</p>
   <a [routerLink]="['/', 'chats', chat.chatId]">ver chat</a>
 </div>

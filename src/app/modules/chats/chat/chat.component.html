@@ -1,6 +1,6 @@
 <div class="chat-container">
   <div class="chat">
-    <!-- nombre de amigo del chat -->
+    <!-- Top - Header -->
     <div class="chat-header">
       <div class="chat-header-user">
         <img
@@ -9,76 +9,85 @@
           alt=""
         />
         <div class="chat-header-name-container">
-          <p *ngFor="let user of chatData.users" class="chat-header-name">
-            <span *ngIf="user.userId !== userId">
-              {{ user.name }}
+          <!-- <p *ngFor="let user of chatData.users" class="chat-header-name">
+            <span>
+              {{ user.fullName }}
             </span>
-          </p>
-          <p>Info extra</p>
+          </p> -->
+          <p class="chatroom-name">{{ chatData.name }}</p>
         </div>
       </div>
-      <button class="chat-header-close">&#10005;</button>
+      <button (click)="onClickExit()" class="chat-header-close">
+        <fa-icon [icon]="faDoorOpen"></fa-icon>
+      </button>
     </div>
-    <!-- Chat -->
+    <!-- Middle - Chat -->
     <div class="chat-messages-container">
       <ul class="chat-messages">
-        <ng-container *ngFor="let chatMessage of chatData.messages">
+        <ng-container *ngFor="let chatMessage of chatMessages">
           <div
             *ngIf="
-              userId.toLowerCase() === chatMessage.userId.toLowerCase();
+              userData.id.toLowerCase() === chatMessage.senderId.toLowerCase();
               else FriendChatMessageContainer
             "
             class="chat-message chat-message-mine-container"
           >
-            <li class="chat-message-mine">{{ chatMessage.messageText }}</li>
+            <li class="chat-message-mine">{{ chatMessage.text }}</li>
           </div>
 
-          <ng-template
-            #FriendChatMessageContainer
-            class="chat-message chat-message-friend-container"
-          >
-            <li class="chat-message-friend">{{ chatMessage.messageText }}</li>
+          <ng-template #FriendChatMessageContainer>
+            <div class="chat-message chat-message-friend-container">
+              <li class="chat-message-friend">{{ chatMessage.text }}</li>
+            </div>
           </ng-template>
         </ng-container>
       </ul>
     </div>
 
-    <div class="chat-current-messages-show-container">
-      <button class="chat-current-messages-show">Mensajes Frecuentes</button>
-    </div>
-    <!-- MensajesFrecuentes -->
-    <ul class="chat-current-messages">
-      <li *ngFor="let currentMessage of currentMessages">
-        <button
-          (click)="onClickCurrentMessage(currentMessage.messageText)"
-          class="chat-current-message chat-current-message-selected"
-        >
-          {{ currentMessage.messageText }}
-        </button>
-      </li>
-    </ul>
-    <!-- Enviar -->
-    <div class="button-send-container">
-      <div class="message-text-container">
-        <input
-          class="message-text"
-          type="text"
-          [(ngModel)]="messageText"
-          name=""
-          id=""
-          placeholder="Escribe tu mensaje aquí..."
-        />
-        <button
-          [ngClass]="{ 'as-currentmessage-true': setAsCurrentMessage }"
-          class="message-current-setbutton"
-          (click)="onClickToggleSetCurrentMessage()"
-        >
-          <fa-icon [icon]="faFloppyDisk"></fa-icon>
-        </button>
-      </div>
-      <button class="button-send" (click)="onSubmitPostMessage()">
-        Enviar mensaje
-      </button>
+    <!-- Bottom - Actions -->
+    <div class="chat-bottom">
+      <!-- QuickMessages -->
+      <ul
+        *ngIf="quickMessages.length > 0 && showQuickMessages"
+        class="chat-current-messages"
+      >
+        <li *ngFor="let quickMessage of quickMessages">
+          <button class="chat-current-message chat-current-message-selected">
+            {{ quickMessage.text }}
+          </button>
+        </li>
+      </ul>
+
+      <!-- Enviar -->
+      <form
+        [formGroup]="chatMessageForm"
+        (ngSubmit)="onSubmitChatMessage()"
+        class="chat-message-form"
+      >
+        <div class="message-text-container">
+          <button
+            type="button"
+            class="button-quick"
+            (click)="toggleShowQuickMessages()"
+          >
+            <fa-icon [icon]="faBoltLightning"></fa-icon>
+          </button>
+          <textarea
+            class="message-text"
+            type="text"
+            formControlName="messageText"
+            name=""
+            id=""
+            placeholder="Escribe tu mensaje aquí..."
+          >
+          </textarea>
+          <button type="submit" class="button-send">
+            <fa-icon [icon]="faArrowUp"></fa-icon>
+          </button>
+          <!-- <div class="">
+          </div> -->
+        </div>
+      </form>
     </div>
   </div>
 </div>

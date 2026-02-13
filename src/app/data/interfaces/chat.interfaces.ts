@@ -1,32 +1,42 @@
+export interface IUser {
+  id: string;
+  fullName: string;
+  chats?: IChat[];
+}
+
 export interface IChat {
   chatId: string;
-  users: IUser[];
-  messages: IChatMessage[];
+  name: string;
+  createdAt: Date;
+  users?: IUser[];
+  messages?: IChatMessage[];
+}
+
+export interface IChatPost {
+  name: string;
 }
 
 export interface IChatMessage {
   chatMessageId: string;
-  messageText: string;
-  sentDate?: Date;
-  userId: string;
-  chatOwnerId: string;
-}
-
-export interface IUser {
-  userId: string;
-  name: string;
-  chats: IChat[];
+  text: string;
+  sentAt: Date;
+  senderId: string;
 }
 
 export interface IChatMessagePost {
-  messageText: string;
-  userId: string;
-  chatOwnerId: string;
-  setAsCurrentMessage: boolean;
+  chatId: string;
+  message: string;
 }
 
-export interface ICurrentMessage {
-  currentMessageId: string;
-  messageText: string;
-  userId: string;
+export interface IQuickMessage {
+  quickMessageId: string;
+  text: string;
+}
+
+export interface IQuickMessagePost {
+  chatMessageId: string;
+}
+
+export interface IChatParticipantPost {
+  guestId: string;
 }
