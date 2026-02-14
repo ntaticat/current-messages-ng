@@ -1,5 +1,5 @@
 export const environment = {
   production: true,
-  apiUrl: 'http://localhost:8080/api',
-  backendUri: 'http://localhost:8080',
+  apiUrl: 'https://current-messages-dotnet.onrender.com/api',
+  backendUri: 'https://current-messages-dotnet.onrender.com',
 };
