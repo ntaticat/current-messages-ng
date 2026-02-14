@@ -1,0 +1,237 @@
+* {
+  box-sizing: border-box;
+}
+
+/* signup.component.css */
+
+:host {
+  --bg-dark: #020202;
+  --card-bg: #0c0c0c;
+  --text-main: #a0a0a0;
+  --primary-glitch: #00ff41; /* Verde Matrix */
+  --secondary-glitch: #ff0055; /* Rojo Error */
+  --font-mono: "Courier New", Courier, monospace;
+}
+
+/* --- Estructura Principal --- */
+.void-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  min-height: 100dvh;
+  width: 100vw;
+  background-color: var(--bg-dark);
+  font-family: var(--font-mono);
+  color: var(--text-main);
+  position: relative;
+  overflow: hidden;
+  padding: 3em 0;
+}
+
+/* Efecto visual de ruido estático (Noise) */
+.noise-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0.05;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+  pointer-events: none;
+  z-index: 0;
+}
+
+.scanlines {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%);
+  background-size: 100% 4px;
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* --- Tarjeta de Registro --- */
+.cryptic-card {
+  position: relative;
+  z-index: 2;
+  width: 100%;
+  max-width: 450px; /* Un poco más ancho que el login */
+  padding: 2.5rem;
+  background: var(--card-bg);
+  border-left: 4px solid var(--text-main); /* Borde asimétrico */
+  box-shadow: 10px 10px 0px rgba(20, 20, 20, 0.5);
+}
+
+/* Título */
+.terminal-title {
+  font-size: 1.5rem;
+  text-align: center;
+  margin-bottom: 2rem;
+  color: #fff;
+  letter-spacing: 2px;
+  border-bottom: 1px dashed #333;
+  padding-bottom: 10px;
+}
+
+.cursor-blink {
+  animation: blink 1s step-end infinite;
+}
+
+@keyframes blink {
+  50% {
+    opacity: 0;
+  }
+}
+
+/* --- Formularios e Inputs --- */
+.input-group {
+  margin-bottom: 1.5rem;
+  position: relative;
+}
+
+label {
+  display: block;
+  font-size: 0.7rem;
+  color: var(--primary-glitch);
+  margin-bottom: 0.5rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+input {
+  width: 100%;
+  background: #111;
+  border: 1px solid #333;
+  color: #fff;
+  padding: 12px;
+  font-family: var(--font-mono);
+  outline: none;
+  transition: 0.3s;
+}
+
+input:focus {
+  border-color: var(--primary-glitch);
+  background: #000;
+  box-shadow: inset 0 0 10px rgba(0, 255, 65, 0.1);
+}
+
+/* Luz de estado (decorativo a la derecha del input) */
+.status-light {
+  position: absolute;
+  right: 10px;
+  top: 38px;
+  width: 6px;
+  height: 6px;
+  background-color: #333;
+  border-radius: 50%;
+  transition: background-color 0.3s;
+}
+
+input:focus + .status-light {
+  background-color: var(--primary-glitch);
+  box-shadow: 0 0 5px var(--primary-glitch);
+}
+
+/* --- Botón de Enviar --- */
+.btn-submit {
+  width: 100%;
+  padding: 1rem;
+  margin-top: 1rem;
+  background: var(--text-main);
+  color: var(--bg-dark);
+  font-weight: 900;
+  font-family: var(--font-mono);
+  text-transform: uppercase;
+  border: none;
+  cursor: pointer;
+  clip-path: polygon(0 0, 100% 0, 95% 100%, 5% 100%); /* Forma de trapecio */
+  transition:
+    transform 0.2s,
+    background 0.2s;
+}
+
+.btn-submit:hover {
+  transform: scale(1.02);
+  background: var(--primary-glitch);
+  color: #000;
+}
+
+/* --- Links --- */
+.redirect-text {
+  margin-top: 1.5rem;
+  text-align: center;
+  font-size: 0.8rem;
+}
+
+.glitch-link {
+  color: #555;
+  text-decoration: none;
+  position: relative;
+  transition: color 0.3s;
+}
+
+.glitch-link:hover {
+  color: var(--secondary-glitch);
+}
+
+/* Efecto glitch al hover del link */
+.glitch-link:hover::before {
+  content: attr(data-text);
+  position: absolute;
+  left: -2px;
+  text-shadow: 1px 0 blue;
+  top: 0;
+  color: var(--secondary-glitch);
+  background: var(--card-bg);
+  overflow: hidden;
+  clip: rect(0, 900px, 0, 0);
+  animation: noise-anim 2s infinite linear alternate-reverse;
+}
+
+/* Botón de Regresar */
+.return-link {
+  margin-top: 3rem;
+  color: #444;
+  text-decoration: none;
+  font-size: 0.75rem;
+  border: 1px solid #222;
+  padding: 5px 15px;
+  transition: all 0.3s;
+}
+
+.return-link:hover {
+  border-color: var(--secondary-glitch);
+  color: var(--secondary-glitch);
+  box-shadow: 0 0 10px rgba(255, 0, 85, 0.2);
+}
+
+/* Animación de ruido para el texto */
+@keyframes noise-anim {
+  0% {
+    clip: rect(4px, 9999px, 80px, 0);
+  }
+  5% {
+    clip: rect(69px, 9999px, 4px, 0);
+  }
+  10% {
+    clip: rect(26px, 9999px, 90px, 0);
+  }
+  /* ... se puede extender para más caos ... */
+  100% {
+    clip: rect(0, 9999px, 0, 0);
+  }
+}
+
+/* Mobile */
+@media (max-width: 600px) {
+  .cryptic-card {
+    border-left: none;
+    border-top: 4px solid var(--text-main);
+    width: 90%;
+    box-shadow: none;
+  }
+}

@@ -20,7 +20,7 @@ export class SignupPageComponent implements OnInit {
     this.registerForm = this.formBuilder.group({
       fullName: ['', [Validators.required, Validators.minLength(3)]],
       email: ['', [Validators.required, Validators.email]],
-      password: ['', Validators.required, Validators.minLength(3)],
+      password: ['', [Validators.required, Validators.minLength(3)]],
     });
   }
 
@@ -30,6 +30,7 @@ export class SignupPageComponent implements OnInit {
     console.log('onSubmitRegister');
 
     if (this.registerForm.valid) {
+      console.log('onSubmitRegister VALID');
       const fullName = this.registerForm.get('fullName')?.value;
       const email = this.registerForm.get('email')?.value;
       const password = this.registerForm.get('password')?.value;
