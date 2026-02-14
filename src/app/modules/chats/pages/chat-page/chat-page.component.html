@@ -52,7 +52,10 @@
         class="chat-current-messages"
       >
         <li *ngFor="let quickMessage of quickMessages">
-          <button class="chat-current-message chat-current-message-selected">
+          <button
+            (click)="onClickQuickMessage(quickMessage.text)"
+            class="chat-current-message"
+          >
             {{ quickMessage.text }}
           </button>
         </li>
@@ -72,15 +75,14 @@
           >
             <fa-icon [icon]="faBoltLightning"></fa-icon>
           </button>
-          <textarea
+          <input
             class="message-text"
             type="text"
             formControlName="messageText"
             name=""
             id=""
             placeholder="Escribe tu mensaje aquí..."
-          >
-          </textarea>
+          />
           <button type="submit" class="button-send">
             <fa-icon [icon]="faArrowUp"></fa-icon>
           </button>

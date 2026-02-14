@@ -5,7 +5,7 @@ import {
   IQuickMessage,
   IQuickMessagePost,
   IUser,
-} from './../../../data/interfaces/chat.interfaces';
+} from '../../../../data/interfaces/chat.interfaces';
 import {
   AfterViewChecked,
   Component,
@@ -28,11 +28,11 @@ import { Subject } from '@microsoft/signalr';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 
 @Component({
-  selector: 'app-chat',
-  templateUrl: './chat.component.html',
-  styleUrls: ['./chat.component.scss'],
+  selector: 'app-chat-page',
+  templateUrl: './chat-page.component.html',
+  styleUrls: ['./chat-page.component.scss'],
 })
-export class ChatComponent implements OnInit, OnDestroy {
+export class ChatPageComponent implements OnInit, OnDestroy {
   faFloppyDisk = faFloppyDisk;
   faArrowUp = faArrowUp;
   faDoorOpen = faDoorOpen;
@@ -156,7 +156,18 @@ export class ChatComponent implements OnInit, OnDestroy {
     });
   }
 
-  onClickCurrentMessage(chatMessageId: string) {
+  onClickQuickMessage(message: string) {
+    const data: IChatMessagePost = {
+      chatId: this.chatId,
+      message,
+    };
+
+    this.api.postChatMessage(data).subscribe(() => {
+      console.log('Se registró el mensaje');
+    });
+  }
+
+  saveQuickMessage(chatMessageId: string) {
     const data: IQuickMessagePost = {
       chatMessageId,
     };
