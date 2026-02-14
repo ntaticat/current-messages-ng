@@ -1,0 +1,40 @@
+<div class="chats-page">
+  <div class="chats">
+    <div class="chat" *ngFor="let chat of chats">
+      <div class="chat-header">
+        <img
+          class="chat-image"
+          src="https://i.pinimg.com/736x/62/3e/c7/623ec7d4bca8e551d3bc6f681180c1ee.jpg"
+          alt="chat-room-image"
+        />
+        <p class="chat-name">
+          {{ chat.name }}
+        </p>
+      </div>
+      <div class="chat-body">
+        <div
+          class="chat-participants"
+          *ngIf="chat.users && chat.users.length > 1"
+        >
+          <p>Participantes</p>
+          <ng-container *ngFor="let participant of chat.users">
+            <div
+              class="chat-participant"
+              *ngIf="participant.id !== userData.id"
+            >
+              {{ participant.fullName }}
+            </div>
+          </ng-container>
+        </div>
+        <div class="chat-actions">
+          <button
+            (click)="onClickEnterChat(chat.chatId)"
+            class="chat-enter-button"
+          >
+            Entrar al chat
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
