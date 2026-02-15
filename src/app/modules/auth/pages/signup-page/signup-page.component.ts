@@ -27,23 +27,29 @@ export class SignupPageComponent implements OnInit {
   ngOnInit(): void {}
 
   onSubmit() {
-    console.log('onSubmitRegister');
-
-    if (this.registerForm.valid) {
-      console.log('onSubmitRegister VALID');
-      const fullName = this.registerForm.get('fullName')?.value;
-      const email = this.registerForm.get('email')?.value;
-      const password = this.registerForm.get('password')?.value;
-
-      const data: IRegisterPost = {
-        fullName,
-        email,
-        password,
-      };
-
-      this.api.register(data).subscribe(() => {
-        this.router.navigateByUrl('/auth/login');
-      });
+    if (this.registerForm.invalid) {
+      alert('El formulario no es valido');
+      return;
     }
+
+    const fullName = this.registerForm.get('fullName')?.value;
+    const email = this.registerForm.get('email')?.value;
+    const password = this.registerForm.get('password')?.value;
+
+    const data: IRegisterPost = {
+      fullName,
+      email,
+      password,
+    };
+
+    this.api.register(data).subscribe({
+      next: () => {
+        this.router.navigateByUrl('/auth/login');
+      },
+      error: (err) => {
+        alert('No se pudo registrar el usuario');
+        console.error(err);
+      },
+    });
   }
 }

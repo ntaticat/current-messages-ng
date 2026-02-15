@@ -29,7 +29,6 @@ export class SignalrService {
 
   sendChatMessageListener() {
     this.hubConnection.on('ReceiveMessage', (data: IChatMessage) => {
-      console.log('¡MENSAJE RECIBIDO DEL SERVIDOR!', data);
       this.newChatMessage$.next(data);
     });
   }
@@ -40,14 +39,12 @@ export class SignalrService {
   }
 
   async joinGroup(chatId: string) {
-    console.log('JOIN GROUP CHATID', chatId);
     await this.hubConnection
       .invoke('JoinChat', chatId)
       .catch((err) => console.error('Error al unirse al grupo', err));
   }
 
   async leaveGroup(chatId: string) {
-    console.log('LEAVE GROUP CHATID', chatId);
     await this.hubConnection
       .invoke('LeaveChat', chatId)
       .catch((err) => console.error('Error al salirse del grupo', err));

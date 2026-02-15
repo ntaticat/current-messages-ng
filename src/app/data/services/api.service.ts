@@ -5,6 +5,7 @@ import {
   IChat,
   IChatMessage,
   IChatMessagePost,
+  IChatParticipantPost,
   IChatPost,
   IQuickMessage,
   IQuickMessagePost,
@@ -70,5 +71,16 @@ export class ApiService {
     return this.http.post(path, body);
   }
 
-  // POST CHAT PARTICIPANT
+  postChatParticipant(
+    chatId: string,
+    data: IChatParticipantPost,
+  ): Observable<{}> {
+    const path = `${this.apiUrl}/Chats/${chatId}/participants`;
+
+    const body = {
+      ...data,
+    };
+
+    return this.http.post(path, body);
+  }
 }

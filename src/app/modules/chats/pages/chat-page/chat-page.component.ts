@@ -23,6 +23,7 @@ import {
   faArrowUp,
   faDoorOpen,
   faBoltLightning,
+  faUserPlus,
 } from '@fortawesome/free-solid-svg-icons';
 import { Subject } from '@microsoft/signalr';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
@@ -37,6 +38,7 @@ export class ChatPageComponent implements OnInit, OnDestroy {
   faArrowUp = faArrowUp;
   faDoorOpen = faDoorOpen;
   faBoltLightning = faBoltLightning;
+  faUserPlus = faUserPlus;
 
   userData: IUser = {
     id: '',
@@ -51,6 +53,7 @@ export class ChatPageComponent implements OnInit, OnDestroy {
     users: [],
   };
 
+  showAddParticipantModal: boolean = false;
   showQuickMessages: boolean = false;
 
   quickMessages: IQuickMessage[] = [];
@@ -75,7 +78,6 @@ export class ChatPageComponent implements OnInit, OnDestroy {
     this.signalr.initHubConnection();
 
     this.signalr.newChatMessage$.subscribe((newChatMessage) => {
-      console.log('SE EMITIO NEWCHATMESSAGE$');
       if (newChatMessage) {
         const exists = this.chatMessages.some(
           (chatMessage) =>
@@ -90,7 +92,6 @@ export class ChatPageComponent implements OnInit, OnDestroy {
     try {
       await this.signalr.startConnection();
       this.signalr.sendChatMessageListener();
-      console.log('SIGNALR CONECTADO');
 
       this.route.paramMap.subscribe(async (paramMap) => {
         const newChatId = paramMap.get('id')!;
@@ -118,6 +119,14 @@ export class ChatPageComponent implements OnInit, OnDestroy {
     this.signalr.closeConnection();
   }
 
+  toggleShowAddParticipantModal() {
+    this.showAddParticipantModal = !this.showAddParticipantModal;
+  }
+
+  onAddParticipant() {
+    this.toggleShowAddParticipantModal();
+  }
+
   onClickExit() {
     this.router.navigateByUrl('/chats');
   }
@@ -133,10 +142,12 @@ export class ChatPageComponent implements OnInit, OnDestroy {
   }
 
   getUserProfile() {
-    this.api.getUserProfile().subscribe((userProfile) => {
-      if (userProfile) {
-        this.userData = userProfile;
-      }
+    this.api.getUserProfile().subscribe({
+      next: (userProfile) => {
+        if (userProfile) {
+          this.userData = userProfile;
+        }
+      },
     });
   }
 
@@ -162,9 +173,7 @@ export class ChatPageComponent implements OnInit, OnDestroy {
       message,
     };
 
-    this.api.postChatMessage(data).subscribe(() => {
-      console.log('Se registró el mensaje');
-    });
+    this.api.postChatMessage(data).subscribe(() => {});
   }
 
   saveQuickMessage(chatMessageId: string) {
@@ -172,14 +181,11 @@ export class ChatPageComponent implements OnInit, OnDestroy {
       chatMessageId,
     };
 
-    this.api.postQuickMessage(data).subscribe(() => {
-      console.log('Se registró el mensaje');
-    });
+    this.api.postQuickMessage(data).subscribe(() => {});
   }
 
   onSubmitChatMessage(): void {
     if (this.chatMessageForm.invalid) {
-      console.error('No se puede enviar mensaje');
       return;
     }
 
@@ -191,9 +197,14 @@ export class ChatPageComponent implements OnInit, OnDestroy {
       message: messageText,
     };
 
-    this.api.postChatMessage(data).subscribe(() => {
-      console.log('Se registró el mensaje');
-      this.chatMessageForm.get('messageText')?.reset();
+    this.api.postChatMessage(data).subscribe({
+      next: () => {
+        this.chatMessageForm.get('messageText')?.reset();
+      },
+      error: (err) => {
+        alert('No se pudo registrar el mensaje');
+        console.error(err);
+      },
     });
   }
 }

@@ -27,7 +27,7 @@ export class AuthInterceptor implements HttpInterceptor {
       return next.handle(req).pipe(finalize(() => null));
     }
 
-    const token = localStorage.getItem('token');
+    const token = localStorage.getItem('conejito-messages-jwt');
 
     if (token) {
       req = req.clone({
@@ -41,7 +41,7 @@ export class AuthInterceptor implements HttpInterceptor {
       finalize(() => null),
       catchError((err: HttpErrorResponse) => {
         if (err.status === 401) {
-          localStorage.removeItem('token');
+          localStorage.removeItem('conejito-messages-jwt');
           console.error('AuthInterceptor: Error 401');
           this.router.navigateByUrl('/auth/login');
         }

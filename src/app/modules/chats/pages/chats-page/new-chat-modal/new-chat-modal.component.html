@@ -1,0 +1,29 @@
+<div class="modal-overlay">
+  <div class="modal-card">
+    <div class="modal-header">
+      <h2>Nuevo Chat</h2>
+      <p>Dale una identidad a tu chat</p>
+    </div>
+
+    <div class="modal-body">
+      <div class="input-group">
+        <label for="chatName">Nombre del chat</label>
+        <input
+          type="text"
+          id="chatName"
+          #chatInput
+          placeholder="Ej: Proyecto Alpha..."
+          autocomplete="off"
+        />
+        <span class="input-bar"></span>
+      </div>
+    </div>
+
+    <div class="modal-footer">
+      <button class="btn-cancel" (click)="closeModal()">Cancelar</button>
+      <button class="btn-submit" (click)="onSubmitChat(chatInput.value)">
+        Comenzar
+      </button>
+    </div>
+  </div>
+</div>

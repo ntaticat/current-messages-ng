@@ -49,6 +49,24 @@
   padding: 0px 18px;
 }
 
+.chat-header-image {
+  width: 3.25em;
+  height: 3.25em;
+  object-fit: cover;
+  object-position: center;
+  border-radius: 50%;
+}
+
+.chat-header-name-container {
+  flex-grow: 1;
+  margin: 0 20px;
+}
+
+.chat-header-actions {
+  display: flex;
+  gap: 10px;
+}
+
 .chat-header-close {
   flex-shrink: 0;
   cursor: pointer;
@@ -63,17 +81,18 @@
   align-items: center;
 }
 
-.chat-header-image {
-  width: 3.25em;
-  height: 3.25em;
-  object-fit: cover;
-  object-position: center;
+.chat-header-add-friend {
+  flex-shrink: 0;
+  cursor: pointer;
+  background: rgb(0, 132, 255);
+  color: #fff;
   border-radius: 50%;
-}
-
-.chat-header-name-container {
-  flex-grow: 1;
-  margin: 0 20px;
+  width: 3em;
+  height: 3em;
+  text-decoration: none;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .chat-messages-container {

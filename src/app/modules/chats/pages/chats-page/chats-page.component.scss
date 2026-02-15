@@ -7,6 +7,78 @@
   box-sizing: border-box;
 }
 
+.user-info-container {
+  padding: 10px;
+  background-color: #222;
+  color: white;
+  box-sizing: border-box;
+  border-radius: 20px;
+  margin-bottom: 1em;
+
+  @media (min-width: 768px) {
+    max-width: 720px;
+    margin: auto;
+  }
+
+  @media (min-width: 992px) {
+    max-width: 960px;
+    margin: auto;
+  }
+
+  display: grid;
+  gap: 10px;
+}
+
+.user-info-name {
+  background-color: #444;
+  padding: 10px;
+  font-size: 1.25em;
+  font-weight: bold;
+  text-align: center;
+  border-radius: 10px;
+}
+
+.share-id-button {
+  width: 100%;
+  padding: 1em 1.25em;
+  border-radius: 10px;
+  cursor: pointer;
+  background: rgb(0, 132, 255);
+  color: #fff;
+}
+
+.new-chat-container {
+  padding: 10px;
+  background-color: #222;
+  color: white;
+  box-sizing: border-box;
+  border-radius: 20px;
+  margin-bottom: 1em;
+
+  @media (min-width: 768px) {
+    max-width: 720px;
+    margin: auto;
+  }
+
+  @media (min-width: 992px) {
+    max-width: 960px;
+    margin: auto;
+  }
+}
+
+.new-chat-button {
+  width: 100%;
+  padding: 1em 1.25em;
+  border-radius: 10px;
+  cursor: pointer;
+  background: green;
+  color: #fff;
+}
+
+.no-chats-message {
+  color: white;
+}
+
 .chats {
   background-color: #222;
   color: white;

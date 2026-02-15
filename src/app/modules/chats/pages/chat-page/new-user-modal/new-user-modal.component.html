@@ -1,0 +1,36 @@
+<div class="modal-overlay">
+  <div class="modal-container">
+    <div class="modal-header">
+      <h2>Añadir Usuario</h2>
+      <p>
+        Introduce el identificador único (UUID) para iniciar la conversación.
+      </p>
+    </div>
+
+    <div class="modal-body">
+      <div class="input-group">
+        <label for="uuid">User ID</label>
+        <div class="input-wrapper">
+          <input
+            type="text"
+            id="uuid"
+            #userInput
+            placeholder="e.g. 123e4567-e89b-12d3-a456-426614174000"
+            spellcheck="false"
+          />
+          <div class="input-glow"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="modal-footer">
+      <button class="btn-secondary" (click)="closeModal()">Cancelar</button>
+      <button
+        class="btn-primary"
+        (click)="onSubmitAddParticipant(userInput.value)"
+      >
+        Invitar al Chat
+      </button>
+    </div>
+  </div>
+</div>

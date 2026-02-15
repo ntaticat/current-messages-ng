@@ -26,20 +26,27 @@ export class LoginPageComponent implements OnInit {
   ngOnInit(): void {}
 
   onSubmit() {
-    console.log('onSubmitLogin');
-
-    if (this.loginForm.valid) {
-      const email = this.loginForm.get('email')?.value;
-      const password = this.loginForm.get('password')?.value;
-
-      const credentials: ILoginPost = {
-        email,
-        password,
-      };
-
-      this.api.login(credentials).subscribe(() => {
-        this.router.navigateByUrl('/chats');
-      });
+    if (this.loginForm.invalid) {
+      alert('El formulario no es valido');
+      return;
     }
+
+    const email = this.loginForm.get('email')?.value;
+    const password = this.loginForm.get('password')?.value;
+
+    const credentials: ILoginPost = {
+      email,
+      password,
+    };
+
+    this.api.login(credentials).subscribe({
+      next: () => {
+        this.router.navigateByUrl('/chats');
+      },
+      error: (err) => {
+        alert('No se pudo iniciar sesión');
+        console.error(err);
+      },
+    });
   }
 }

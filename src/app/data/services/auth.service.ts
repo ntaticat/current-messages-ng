@@ -39,6 +39,6 @@ export class AuthService {
   }
 
   saveToken(token: string) {
-    localStorage.setItem('token', token);
+    localStorage.setItem('conejito-messages-jwt', token);
   }
 }
