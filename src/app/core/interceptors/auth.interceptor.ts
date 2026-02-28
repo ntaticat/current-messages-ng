@@ -1,52 +1,40 @@
-import {
-  HttpErrorResponse,
-  HttpEvent,
-  HttpHandler,
-  HttpInterceptor,
-  HttpRequest,
-} from '@angular/common/http';
-import { Injectable, Injector } from '@angular/core';
+import { HttpInterceptorFn, HttpErrorResponse } from '@angular/common/http';
+import { inject } from '@angular/core';
 import { Router } from '@angular/router';
-import { EMPTY, from, Observable, throwError } from 'rxjs';
-import { catchError, finalize } from 'rxjs/operators';
+import { catchError, throwError } from 'rxjs';
 
-@Injectable({
-  providedIn: 'root',
-})
-export class AuthInterceptor implements HttpInterceptor {
-  constructor(private router: Router) {}
+export const authInterceptor: HttpInterceptorFn = (req, next) => {
+  const router = inject(Router); // Usamos inject() en lugar del constructor
+  const token = localStorage.getItem('conejito-messages-jwt');
 
-  intercept(
-    req: HttpRequest<any>,
-    next: HttpHandler,
-  ): Observable<HttpEvent<any>> {
-    if (
-      req.url.includes('Auth/login') ||
-      (req.url.includes('Auth/register') && req.method == 'POST')
-    ) {
-      return next.handle(req).pipe(finalize(() => null));
-    }
+  // Lógica de exclusión (Login / Register)
+  const isAuthPath =
+    req.url.includes('Auth/login') ||
+    (req.url.includes('Auth/register') && req.method === 'POST');
 
-    const token = localStorage.getItem('conejito-messages-jwt');
-
-    if (token) {
-      req = req.clone({
-        setHeaders: {
-          authorization: `Bearer ${token}`,
-        },
-      });
-    }
-
-    return next.handle(req).pipe(
-      finalize(() => null),
-      catchError((err: HttpErrorResponse) => {
-        if (err.status === 401) {
-          localStorage.removeItem('conejito-messages-jwt');
-          console.error('AuthInterceptor: Error 401');
-          this.router.navigateByUrl('/auth/login');
-        }
-        return throwError(err);
-      }),
-    );
+  if (isAuthPath) {
+    return next(req);
   }
-}
+
+  // Clonar e insertar token si existe
+  let authReq = req;
+  if (token) {
+    authReq = req.clone({
+      setHeaders: {
+        authorization: `Bearer ${token}`,
+      },
+    });
+  }
+
+  // Manejo de errores 401
+  return next(authReq).pipe(
+    catchError((err: HttpErrorResponse) => {
+      if (err.status === 401) {
+        localStorage.removeItem('conejito-messages-jwt');
+        console.error('AuthInterceptor: Error 401');
+        router.navigateByUrl('/auth/login');
+      }
+      return throwError(() => err);
+    }),
+  );
+};

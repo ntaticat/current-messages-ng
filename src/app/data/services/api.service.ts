@@ -1,6 +1,7 @@
-import { environment } from './../../../environments/environment';
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core'; // 1. Importa inject
 import { HttpClient } from '@angular/common/http';
+import { Observable } from 'rxjs';
+import { environment } from '../../../environments/environment';
 import {
   IChat,
   IChatMessage,
@@ -11,76 +12,60 @@ import {
   IQuickMessagePost,
   IUser,
 } from '../interfaces/chat.interfaces';
-import { map, Observable, tap } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
 })
 export class ApiService {
-  apiUrl = environment.apiUrl;
+  // 2. Inyección moderna sin constructor (más limpio para testing)
+  private readonly http = inject(HttpClient);
+  private readonly apiUrl = environment.apiUrl;
 
-  constructor(private http: HttpClient) {}
-
+  // 3. Uso de Template Strings optimizado
   getUserProfile(): Observable<IUser> {
-    const path = `${this.apiUrl}/Users`;
-
-    return this.http.get<IUser>(path);
+    return this.http.get<IUser>(`${this.apiUrl}/Users`);
   }
 
   getChat(chatId: string): Observable<IChat> {
-    const path = `${this.apiUrl}/chats/${chatId}`;
-
-    return this.http.get<IChat>(path);
+    return this.http.get<IChat>(`${this.apiUrl}/chats/${chatId}`);
   }
 
   getChats(): Observable<IChat[]> {
-    let path = `${this.apiUrl}/chats`;
-    return this.http.get<IChat[]>(path);
+    return this.http.get<IChat[]>(`${this.apiUrl}/chats`);
   }
 
-  postChat(data: IChatPost) {
-    const path = `${this.apiUrl}/chats`;
-    return this.http.post(path, data);
+  postChat(data: IChatPost): Observable<any> {
+    return this.http.post(`${this.apiUrl}/chats`, data);
   }
 
-  getChatMessages(chatId: string, page: number = 1, pageSize: number = 50) {
-    let path = `${this.apiUrl}/Chats/${chatId}/messages?page=${page}&pageSize=${pageSize}`;
-
-    return this.http.get<IChatMessage[]>(path);
+  getChatMessages(
+    chatId: string,
+    page = 1,
+    pageSize = 50,
+  ): Observable<IChatMessage[]> {
+    // 4. Se eliminan variables locales 'path' innecesarias para reducir memoria
+    return this.http.get<IChatMessage[]>(
+      `${this.apiUrl}/Chats/${chatId}/messages`,
+      { params: { page, pageSize } }, // 5. Usa 'params' para mayor seguridad con caracteres especiales
+    );
   }
 
-  getQuickMessages() {
-    let path = `${this.apiUrl}/QuickMessages`;
-
-    return this.http.get<IQuickMessage[]>(path);
+  getQuickMessages(): Observable<IQuickMessage[]> {
+    return this.http.get<IQuickMessage[]>(`${this.apiUrl}/QuickMessages`);
   }
 
-  postQuickMessage(data: IQuickMessagePost): Observable<{}> {
-    const path = `${this.apiUrl}/QuickMessages`;
-
-    return this.http.post(path, data);
+  postQuickMessage(data: IQuickMessagePost): Observable<Object> {
+    return this.http.post(`${this.apiUrl}/QuickMessages`, data);
   }
 
-  postChatMessage(data: IChatMessagePost): Observable<{}> {
-    const path = `${this.apiUrl}/ChatMessages`;
-
-    const body = {
-      ...data,
-    };
-
-    return this.http.post(path, body);
+  postChatMessage(data: IChatMessagePost): Observable<Object> {
+    return this.http.post(`${this.apiUrl}/ChatMessages`, data);
   }
 
   postChatParticipant(
     chatId: string,
     data: IChatParticipantPost,
-  ): Observable<{}> {
-    const path = `${this.apiUrl}/Chats/${chatId}/participants`;
-
-    const body = {
-      ...data,
-    };
-
-    return this.http.post(path, body);
+  ): Observable<Object> {
+    return this.http.post(`${this.apiUrl}/Chats/${chatId}/participants`, data);
   }
 }

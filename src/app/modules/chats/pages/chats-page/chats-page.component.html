@@ -1,14 +1,14 @@
 <div class="chats-page">
   <div class="user-info-container">
     <p>Identificador:</p>
-    <p class="user-info-name">{{ userData.fullName }}</p>
+    <p class="user-info-name">{{ userData().fullName }}</p>
     <p class="">
       Copia tu Id para compartirlo con otras personas para comunicarte con ellas
       por chat
     </p>
     <button
       (click)="onClickCopyId()"
-      [cdkCopyToClipboard]="userData.id"
+      [cdkCopyToClipboard]="userData().id"
       class="share-id-button"
     >
       Copiar Id
@@ -20,52 +20,52 @@
       Nuevo chat
     </button>
   </div>
-  <ng-container *ngIf="chats && chats.length > 0; else noChats">
+  @if (chats() && chats().length > 0) {
     <div class="chats">
-      <div class="chat" *ngFor="let chat of chats">
-        <div class="chat-header">
-          <img
-            class="chat-image"
-            src="https://i.pinimg.com/736x/62/3e/c7/623ec7d4bca8e551d3bc6f681180c1ee.jpg"
-            alt="chat-room-image"
-          />
-          <p class="chat-name">
-            {{ chat.name }}
-          </p>
-        </div>
-        <div class="chat-body">
-          <div
-            class="chat-participants"
-            *ngIf="chat.users && chat.users.length > 1"
-          >
-            <p>Participantes</p>
-            <ng-container *ngFor="let participant of chat.users">
-              <div
-                class="chat-participant"
-                *ngIf="participant.id !== userData.id"
-              >
-                {{ participant.fullName }}
+      @for (chat of chats(); track chat) {
+        <div class="chat">
+          <div class="chat-header">
+            <img
+              class="chat-image"
+              src="https://i.pinimg.com/736x/62/3e/c7/623ec7d4bca8e551d3bc6f681180c1ee.jpg"
+              alt="chat-room-image"
+            />
+            <p class="chat-name">
+              {{ chat.name }}
+            </p>
+          </div>
+          <div class="chat-body">
+            @if (chat.users && chat.users.length > 1) {
+              <div class="chat-participants">
+                <p>Participantes</p>
+                @for (participant of chat.users; track participant) {
+                  @if (participant.id !== userData().id) {
+                    <div class="chat-participant">
+                      {{ participant.fullName }}
+                    </div>
+                  }
+                }
               </div>
-            </ng-container>
-          </div>
-          <div class="chat-actions">
-            <button
-              (click)="onClickEnterChat(chat.chatId)"
-              class="chat-enter-button"
-            >
-              Entrar al chat
-            </button>
+            }
+            <div class="chat-actions">
+              <button
+                (click)="onClickEnterChat(chat.chatId)"
+                class="chat-enter-button"
+              >
+                Entrar al chat
+              </button>
+            </div>
           </div>
         </div>
-      </div>
+      }
     </div>
-  </ng-container>
-  <ng-template #noChats>
+  } @else {
     <p class="no-chats-message">No hay chats</p>
-  </ng-template>
+  }
 
-  <app-new-chat-modal
-    (closeModalEvent)="onChatCreated()"
-    *ngIf="showNewChatModal"
-  ></app-new-chat-modal>
+  @if (showNewChatModal()) {
+    <app-new-chat-modal
+      (closeModalEvent)="onChatCreated()"
+    ></app-new-chat-modal>
+  }
 </div>

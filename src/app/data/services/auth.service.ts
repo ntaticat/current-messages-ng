@@ -1,44 +1,44 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { shareReplay, tap } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import {
   ILoginPost,
   IRegisterPost,
   IToken,
 } from '../interfaces/auth.interfaces';
-import { map, shareReplay, tap } from 'rxjs';
-import { HttpClient } from '@angular/common/http';
 
 @Injectable({
   providedIn: 'root',
 })
 export class AuthService {
-  apiUrl = environment.apiUrl;
-
-  constructor(private http: HttpClient) {}
+  private readonly http = inject(HttpClient);
+  private readonly apiUrl = environment.apiUrl;
+  private readonly TOKEN_KEY = 'conejito-messages-jwt';
 
   register(data: IRegisterPost) {
-    const method = `Auth/register`;
     return this.http
-      .post<string>(`${this.apiUrl}/${method}`, data)
+      .post<string>(`${this.apiUrl}/Auth/register`, data)
       .pipe(shareReplay());
   }
 
   login(loginPost: ILoginPost) {
-    const method = `Auth/login`;
-    return this.http.post<IToken>(`${this.apiUrl}/${method}`, loginPost).pipe(
-      tap({
-        next: (resp) => this.saveToken(resp.token),
-      }),
-      map((resp) => resp),
+    return this.http.post<IToken>(`${this.apiUrl}/Auth/login`, loginPost).pipe(
+      tap((resp) => this.saveToken(resp.token)),
       shareReplay(),
     );
   }
 
-  clearSession() {
-    localStorage.clear();
+  logout() {
+    localStorage.removeItem(this.TOKEN_KEY);
+    // Considera usar un Subject para notificar el estado de auth
   }
 
-  saveToken(token: string) {
-    localStorage.setItem('conejito-messages-jwt', token);
+  private saveToken(token: string) {
+    localStorage.setItem(this.TOKEN_KEY, token);
+  }
+
+  getToken(): string | null {
+    return localStorage.getItem(this.TOKEN_KEY);
   }
 }

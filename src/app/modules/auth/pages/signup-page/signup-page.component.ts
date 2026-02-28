@@ -1,19 +1,27 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { Router } from '@angular/router';
+import {
+  UntypedFormBuilder,
+  UntypedFormGroup,
+  Validators,
+  FormsModule,
+  ReactiveFormsModule,
+} from '@angular/forms';
+import { Router, RouterLink } from '@angular/router';
 import { IRegisterPost } from 'src/app/data/interfaces/auth.interfaces';
 import { AuthService } from 'src/app/data/services/auth.service';
 
 @Component({
   selector: 'app-signup-page',
+  standalone: true,
   templateUrl: './signup-page.component.html',
-  styleUrls: ['./signup-page.component.scss'],
+  styleUrl: './signup-page.component.scss',
+  imports: [FormsModule, ReactiveFormsModule, RouterLink],
 })
 export class SignupPageComponent implements OnInit {
-  registerForm: FormGroup;
+  registerForm: UntypedFormGroup;
 
   constructor(
-    private formBuilder: FormBuilder,
+    private formBuilder: UntypedFormBuilder,
     private router: Router,
     private api: AuthService,
   ) {

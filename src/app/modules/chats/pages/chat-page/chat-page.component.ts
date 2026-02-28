@@ -1,23 +1,20 @@
 import {
-  IChat,
-  IChatMessage,
-  IChatMessagePost,
-  IQuickMessage,
-  IQuickMessagePost,
-  IUser,
-} from '../../../../data/interfaces/chat.interfaces';
-import {
-  AfterViewChecked,
   Component,
-  ElementRef,
-  OnDestroy,
   OnInit,
-  ViewChild,
+  OnDestroy,
+  inject,
+  signal,
+  effect,
 } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { ApiService } from 'src/app/data/services/api.service';
-import { SignalrService } from 'src/app/data/services/signalr.service';
-import { Subscription, takeUntil } from 'rxjs';
+import {
+  FormControl,
+  FormGroup,
+  Validators,
+  FormsModule,
+  ReactiveFormsModule,
+} from '@angular/forms';
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import {
   faFloppyDisk,
   faArrowUp,
@@ -25,186 +22,131 @@ import {
   faBoltLightning,
   faUserPlus,
 } from '@fortawesome/free-solid-svg-icons';
-import { Subject } from '@microsoft/signalr';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
+
+import { ApiService } from 'src/app/data/services/api.service';
+import { SignalrService } from 'src/app/data/services/signalr.service';
+import { NewUserModalComponent } from './new-user-modal/new-user-modal.component';
+import {
+  IChat,
+  IChatMessage,
+  IChatMessagePost,
+  IQuickMessage,
+  IUser,
+} from '../../../../data/interfaces/chat.interfaces';
 
 @Component({
   selector: 'app-chat-page',
+  standalone: true,
+  imports: [
+    FontAwesomeModule,
+    FormsModule,
+    ReactiveFormsModule,
+    NewUserModalComponent,
+  ],
   templateUrl: './chat-page.component.html',
   styleUrls: ['./chat-page.component.scss'],
 })
 export class ChatPageComponent implements OnInit, OnDestroy {
-  faFloppyDisk = faFloppyDisk;
-  faArrowUp = faArrowUp;
-  faDoorOpen = faDoorOpen;
-  faBoltLightning = faBoltLightning;
-  faUserPlus = faUserPlus;
+  private readonly api = inject(ApiService);
+  private readonly signalr = inject(SignalrService);
+  private readonly route = inject(ActivatedRoute);
+  private readonly router = inject(Router);
 
-  userData: IUser = {
-    id: '',
-    fullName: '',
+  readonly icons = {
+    faFloppyDisk,
+    faArrowUp,
+    faDoorOpen,
+    faBoltLightning,
+    faUserPlus,
   };
 
-  chatId: string = '';
-  chatData: IChat = {
-    chatId: '',
-    name: '',
-    createdAt: new Date(),
-    users: [],
-  };
+  // Signals de estado
+  userData = signal<IUser | null>(null);
+  chatData = signal<IChat | null>(null);
+  chatMessages = signal<IChatMessage[]>([]);
+  quickMessages = signal<IQuickMessage[]>([]);
+  showAddParticipantModal = signal(false);
+  chatId = '';
 
-  showAddParticipantModal: boolean = false;
-  showQuickMessages: boolean = false;
+  chatForm = new FormGroup({
+    messageText: new FormControl('', {
+      nonNullable: true,
+      validators: [Validators.required],
+    }),
+  });
 
-  quickMessages: IQuickMessage[] = [];
-  chatMessages: IChatMessage[] = [];
+  constructor() {
+    // Effect: Reacciona automáticamente cuando SignalR recibe un mensaje
+    effect(() => {
+      const msg = this.signalr.newChatMessage();
 
-  newChatMessageSub: Subscription = new Subscription();
-
-  chatMessageForm: FormGroup;
-
-  constructor(
-    private api: ApiService,
-    private route: ActivatedRoute,
-    private router: Router,
-    private signalr: SignalrService,
-  ) {
-    this.chatMessageForm = new FormGroup({
-      messageText: new FormControl('', [Validators.required]),
+      if (
+        msg &&
+        !this.chatMessages().some((m) => m.chatMessageId === msg.chatMessageId)
+      ) {
+        this.chatMessages.update((prev) =>
+          this.ordenarMessages([...prev, msg]),
+        );
+      }
     });
   }
 
   async ngOnInit() {
-    this.signalr.initHubConnection();
-
-    this.signalr.newChatMessage$.subscribe((newChatMessage) => {
-      if (newChatMessage) {
-        const exists = this.chatMessages.some(
-          (chatMessage) =>
-            chatMessage.chatMessageId === newChatMessage.chatMessageId,
-        );
-        if (!exists) {
-          this.chatMessages.push(newChatMessage);
-        }
-      }
-    });
-
     try {
       await this.signalr.startConnection();
-      this.signalr.sendChatMessageListener();
 
-      this.route.paramMap.subscribe(async (paramMap) => {
-        const newChatId = paramMap.get('id')!;
+      this.route.paramMap.subscribe(async (params) => {
+        const chatId = params.get('chatId')!;
+        if (this.chatId && this.chatId !== chatId)
+          await this.signalr.leaveGroup(this.chatId);
 
-        if (this.chatId && this.chatId !== newChatId) {
-          this.signalr.leaveGroup(this.chatId);
-        }
-
-        this.chatId = newChatId;
+        this.chatId = chatId;
         await this.signalr.joinGroup(this.chatId);
-
-        this.api.getChat(this.chatId).subscribe((chatData) => {
-          this.chatData = chatData;
-        });
-        this.getUserProfile();
-        this.getChatMessages();
-        this.getQuickMessages();
+        this.loadInitialData();
       });
-    } catch (error) {
-      console.error('Error conectando a SIGNALR: ', error);
+    } catch (err) {
+      console.error('Connection Error:', err);
     }
   }
 
-  ngOnDestroy(): void {
+  private loadInitialData() {
+    // Cargamos todo en paralelo para mejor performance
+    this.api.getChat(this.chatId).subscribe((data) => this.chatData.set(data));
+    this.api.getUserProfile().subscribe((user) => this.userData.set(user));
+    this.api.getQuickMessages().subscribe((qm) => this.quickMessages.set(qm));
+    this.api
+      .getChatMessages(this.chatId)
+      .subscribe((msgs) => this.chatMessages.set(this.ordenarMessages(msgs)));
+  }
+
+  private ordenarMessages(messages: IChatMessage[]) {
+    return [...messages].sort(
+      (a, b) => new Date(a.sentAt).getTime() - new Date(b.sentAt).getTime(),
+    );
+  }
+
+  onSubmitChatMessage() {
+    if (this.chatForm.invalid) return;
+
+    const data: IChatMessagePost = {
+      chatId: this.chatId,
+      message: this.chatForm.controls.messageText.value,
+    };
+
+    this.api.postChatMessage(data).subscribe({
+      next: () => this.chatForm.reset(),
+      error: () => alert('Error al enviar'),
+    });
+  }
+
+  async ngOnDestroy() {
+    console.log('Component Destroy');
+    this.chatMessages.set([]);
+    await this.signalr.leaveGroup(this.chatId);
     this.signalr.closeConnection();
-  }
-
-  toggleShowAddParticipantModal() {
-    this.showAddParticipantModal = !this.showAddParticipantModal;
-  }
-
-  onAddParticipant() {
-    this.toggleShowAddParticipantModal();
   }
 
   onClickExit() {
     this.router.navigateByUrl('/chats');
-  }
-
-  toggleShowQuickMessages() {
-    this.showQuickMessages = !this.showQuickMessages;
-  }
-
-  ordenarChatMessagesPorFecha(messages: IChatMessage[]) {
-    return messages.sort((a, b) => {
-      return new Date(a.sentAt).getTime() - new Date(b.sentAt).getTime();
-    });
-  }
-
-  getUserProfile() {
-    this.api.getUserProfile().subscribe({
-      next: (userProfile) => {
-        if (userProfile) {
-          this.userData = userProfile;
-        }
-      },
-    });
-  }
-
-  getChatMessages() {
-    this.api.getChatMessages(this.chatId).subscribe((chatMessages) => {
-      if (chatMessages) {
-        this.chatMessages = [...this.ordenarChatMessagesPorFecha(chatMessages)];
-      }
-    });
-  }
-
-  getQuickMessages() {
-    this.api.getQuickMessages().subscribe((quickMessages) => {
-      if (quickMessages) {
-        this.quickMessages = quickMessages;
-      }
-    });
-  }
-
-  onClickQuickMessage(message: string) {
-    const data: IChatMessagePost = {
-      chatId: this.chatId,
-      message,
-    };
-
-    this.api.postChatMessage(data).subscribe(() => {});
-  }
-
-  saveQuickMessage(chatMessageId: string) {
-    const data: IQuickMessagePost = {
-      chatMessageId,
-    };
-
-    this.api.postQuickMessage(data).subscribe(() => {});
-  }
-
-  onSubmitChatMessage(): void {
-    if (this.chatMessageForm.invalid) {
-      return;
-    }
-
-    const messageText: string =
-      this.chatMessageForm.get('messageText')?.value ?? '';
-
-    const data: IChatMessagePost = {
-      chatId: this.chatId,
-      message: messageText,
-    };
-
-    this.api.postChatMessage(data).subscribe({
-      next: () => {
-        this.chatMessageForm.get('messageText')?.reset();
-      },
-      error: (err) => {
-        alert('No se pudo registrar el mensaje');
-        console.error(err);
-      },
-    });
   }
 }

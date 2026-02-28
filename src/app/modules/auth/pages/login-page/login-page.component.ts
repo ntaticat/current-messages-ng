@@ -1,19 +1,27 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { Router } from '@angular/router';
+import {
+  UntypedFormBuilder,
+  UntypedFormGroup,
+  Validators,
+  FormsModule,
+  ReactiveFormsModule,
+} from '@angular/forms';
+import { Router, RouterLink } from '@angular/router';
 import { ILoginPost } from 'src/app/data/interfaces/auth.interfaces';
 import { AuthService } from 'src/app/data/services/auth.service';
 
 @Component({
   selector: 'app-login-page',
+  standalone: true,
   templateUrl: './login-page.component.html',
-  styleUrls: ['./login-page.component.scss'],
+  styleUrl: './login-page.component.scss',
+  imports: [FormsModule, ReactiveFormsModule, RouterLink],
 })
 export class LoginPageComponent implements OnInit {
-  loginForm: FormGroup;
+  loginForm: UntypedFormGroup;
 
   constructor(
-    private formBuilder: FormBuilder,
+    private formBuilder: UntypedFormBuilder,
     private router: Router,
     private api: AuthService,
   ) {

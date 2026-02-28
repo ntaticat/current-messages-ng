@@ -3,9 +3,9 @@ import { IChatParticipantPost } from 'src/app/data/interfaces/chat.interfaces';
 import { ApiService } from 'src/app/data/services/api.service';
 
 @Component({
-  selector: 'app-new-user-modal',
-  templateUrl: './new-user-modal.component.html',
-  styleUrls: ['./new-user-modal.component.scss'],
+    selector: 'app-new-user-modal',
+    templateUrl: './new-user-modal.component.html',
+    styleUrls: ['./new-user-modal.component.scss']
 })
 export class NewUserModalComponent implements OnInit {
   @Output() closeModalEvent = new EventEmitter();

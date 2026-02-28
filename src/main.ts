@@ -1,12 +1,20 @@
-import { enableProdMode } from '@angular/core';
-import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
+import { bootstrapApplication } from '@angular/platform-browser';
+import { provideRouter } from '@angular/router';
 
-import { AppModule } from './app/app.module';
-import { environment } from './environments/environment';
+import { AppComponent } from './app/app.component';
+import { routes } from './app/app.routes';
+import { provideHttpClient, withInterceptors } from '@angular/common/http';
+import { authInterceptor } from './app/core/interceptors/auth.interceptor';
 
-if (environment.production) {
-  enableProdMode();
-}
+bootstrapApplication(AppComponent, {
+  providers: [
+    // 1. Enrutamiento moderno
+    provideRouter(routes),
 
-platformBrowserDynamic().bootstrapModule(AppModule)
-  .catch(err => console.error(err));
+    // 2. HTTP con interceptores funcionales (más rápido que DI)
+    provideHttpClient(withInterceptors([authInterceptor])),
+
+    // 3. Animaciones sin necesidad de cargar todo el módulo
+    // provideAnimations(),
+  ],
+}).catch((err) => console.error(err));

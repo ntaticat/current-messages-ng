@@ -6,104 +6,94 @@
         <img
           class="chat-header-image"
           src="https://i.pinimg.com/736x/62/3e/c7/623ec7d4bca8e551d3bc6f681180c1ee.jpg"
-          alt=""
+          alt="Avatar"
         />
         <div class="chat-header-name-container">
-          <!-- <p *ngFor="let user of chatData.users" class="chat-header-name">
-            <span>
-              {{ user.fullName }}
-            </span>
-          </p> -->
-          <p class="chatroom-name">{{ chatData.name }}</p>
+          <!-- Usamos el safe navigation check o el valor del signal -->
+          <p class="chatroom-name">{{ chatData()?.name }}</p>
         </div>
       </div>
       <div class="chat-header-actions">
         <button
-          (click)="toggleShowAddParticipantModal()"
+          (click)="showAddParticipantModal.set(true)"
           class="chat-header-add-friend"
         >
-          <fa-icon [icon]="faUserPlus"></fa-icon>
+          <fa-icon [icon]="icons.faUserPlus"></fa-icon>
         </button>
         <button (click)="onClickExit()" class="chat-header-close">
-          <fa-icon [icon]="faDoorOpen"></fa-icon>
+          <fa-icon [icon]="icons.faDoorOpen"></fa-icon>
         </button>
       </div>
     </div>
+
     <!-- Middle - Chat -->
     <div class="chat-messages-container">
       <ul class="chat-messages">
-        <ng-container *ngFor="let chatMessage of chatMessages">
-          <div
-            *ngIf="
-              userData.id.toLowerCase() === chatMessage.senderId.toLowerCase();
-              else FriendChatMessageContainer
-            "
-            class="chat-message chat-message-mine-container"
-          >
-            <li class="chat-message-mine">{{ chatMessage.text }}</li>
-          </div>
-
-          <ng-template #FriendChatMessageContainer>
+        @for (chatMessage of chatMessages(); track chatMessage.chatMessageId) {
+          @if (
+            userData()?.id?.toLowerCase() === chatMessage.senderId.toLowerCase()
+          ) {
+            <div class="chat-message chat-message-mine-container">
+              <li class="chat-message-mine">{{ chatMessage.text }}</li>
+            </div>
+          } @else {
             <div class="chat-message chat-message-friend-container">
               <li class="chat-message-friend">{{ chatMessage.text }}</li>
             </div>
-          </ng-template>
-        </ng-container>
+          }
+        } @empty {
+          <p class="text-center">No hay mensajes en esta conversación.</p>
+        }
       </ul>
     </div>
 
     <!-- Bottom - Actions -->
     <div class="chat-bottom">
       <!-- QuickMessages -->
-      <ul
-        *ngIf="quickMessages.length > 0 && showQuickMessages"
-        class="chat-current-messages"
-      >
-        <li *ngFor="let quickMessage of quickMessages">
-          <button
-            (click)="onClickQuickMessage(quickMessage.text)"
-            class="chat-current-message"
-          >
-            {{ quickMessage.text }}
-          </button>
-        </li>
-      </ul>
+      @if (quickMessages().length > 0) {
+        <ul class="chat-current-messages">
+          @for (quickMessage of quickMessages(); track quickMessage.text) {
+            <li>
+              <button class="chat-current-message">
+                {{ quickMessage.text }}
+              </button>
+            </li>
+          }
+        </ul>
+      }
 
       <!-- Enviar -->
       <form
-        [formGroup]="chatMessageForm"
+        [formGroup]="chatForm"
         (ngSubmit)="onSubmitChatMessage()"
         class="chat-message-form"
       >
         <div class="message-text-container">
-          <button
-            type="button"
-            class="button-quick"
-            (click)="toggleShowQuickMessages()"
-          >
-            <fa-icon [icon]="faBoltLightning"></fa-icon>
+          <button type="button" class="button-quick">
+            <fa-icon [icon]="icons.faBoltLightning"></fa-icon>
           </button>
           <input
             class="message-text"
             type="text"
             formControlName="messageText"
-            name=""
-            id=""
             placeholder="Escribe tu mensaje aquí..."
           />
-          <button type="submit" class="button-send">
-            <fa-icon [icon]="faArrowUp"></fa-icon>
+          <button
+            type="submit"
+            class="button-send"
+            [disabled]="chatForm.invalid"
+          >
+            <fa-icon [icon]="icons.faArrowUp"></fa-icon>
           </button>
-          <!-- <div class="">
-          </div> -->
         </div>
       </form>
     </div>
   </div>
 
-  <app-new-user-modal
-    (closeModalEvent)="onAddParticipant()"
-    [chatId]="chatId"
-    *ngIf="showAddParticipantModal"
-  ></app-new-user-modal>
+  @if (showAddParticipantModal()) {
+    <app-new-user-modal
+      (closeModalEvent)="showAddParticipantModal.set(false)"
+      [chatId]="chatId"
+    ></app-new-user-modal>
+  }
 </div>
