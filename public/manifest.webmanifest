@@ -1,0 +1,17 @@
+{
+  "name": "conejito messages",
+  "short_name": "ConejitoMessages",
+  "theme_color": "#000000",
+  "background_color": "#000000",
+  "display": "standalone",
+  "scope": "./",
+  "start_url": "./",
+  "icons": [
+    {
+      "src": "icons/monokuma.png",
+      "sizes": "1152x1152",
+      "type": "image/png",
+      "purpose": "maskable any"
+    }
+  ]
+}
