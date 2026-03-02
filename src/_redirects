@@ -1,1 +1,7 @@
-/* /index.html 200
+# No redirigir archivos estáticos de la PWA
+/manifest.webmanifest  /manifest.webmanifest  200
+/ngsw-worker.js        /ngsw-worker.js        200
+/ngsw.json             /ngsw.json             200
+
+# Redirigir todo lo demás al index.html (para rutas de Angular)
+/*  /index.html  200
