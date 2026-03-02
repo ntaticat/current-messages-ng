@@ -5,6 +5,9 @@ import {
   inject,
   signal,
   effect,
+  computed,
+  Injector,
+  DestroyRef,
 } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import {
@@ -33,6 +36,7 @@ import {
   IQuickMessage,
   IUser,
 } from '../../../../data/interfaces/chat.interfaces';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'app-chat-page',
@@ -51,6 +55,7 @@ export class ChatPageComponent implements OnInit, OnDestroy {
   private readonly signalr = inject(SignalrService);
   private readonly route = inject(ActivatedRoute);
   private readonly router = inject(Router);
+  private readonly destroyRef = inject(DestroyRef);
 
   readonly icons = {
     faFloppyDisk,
@@ -63,10 +68,15 @@ export class ChatPageComponent implements OnInit, OnDestroy {
   // Signals de estado
   userData = signal<IUser | null>(null);
   chatData = signal<IChat | null>(null);
-  chatMessages = signal<IChatMessage[]>([]);
   quickMessages = signal<IQuickMessage[]>([]);
   showAddParticipantModal = signal(false);
   chatId = '';
+  private _rawChatMessages = signal<IChatMessage[]>([]);
+  readonly chatMessages = computed(() => {
+    return [...this._rawChatMessages()].sort(
+      (a, b) => new Date(a.sentAt).getTime() - new Date(b.sentAt).getTime(),
+    );
+  });
 
   chatForm = new FormGroup({
     messageText: new FormControl('', {
@@ -77,52 +87,48 @@ export class ChatPageComponent implements OnInit, OnDestroy {
 
   constructor() {
     // Effect: Reacciona automáticamente cuando SignalR recibe un mensaje
-    effect(() => {
-      const msg = this.signalr.newChatMessage();
-
-      if (
-        msg &&
-        !this.chatMessages().some((m) => m.chatMessageId === msg.chatMessageId)
-      ) {
-        this.chatMessages.update((prev) =>
-          this.ordenarMessages([...prev, msg]),
-        );
-      }
-    });
+    this.signalr.message$
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe((msg) => {
+        this._rawChatMessages.update((prev) => {
+          const existe = prev.some(
+            (m) => m.chatMessageId === msg.chatMessageId,
+          );
+          return existe ? prev : [...prev, msg];
+        });
+      });
   }
 
   async ngOnInit() {
     try {
       await this.signalr.startConnection();
 
-      this.route.paramMap.subscribe(async (params) => {
-        const chatId = params.get('chatId')!;
-        if (this.chatId && this.chatId !== chatId)
-          await this.signalr.leaveGroup(this.chatId);
+      this.route.paramMap
+        .pipe(takeUntilDestroyed(this.destroyRef))
+        .subscribe(async (params) => {
+          const chatId = params.get('chatId')!;
 
-        this.chatId = chatId;
-        await this.signalr.joinGroup(this.chatId);
-        this.loadInitialData();
-      });
+          this._rawChatMessages.set([]);
+
+          if (this.chatId && this.chatId !== chatId)
+            await this.signalr.leaveGroup(this.chatId);
+
+          this.chatId = chatId;
+          await this.signalr.joinGroup(this.chatId);
+          this.loadInitialData();
+        });
     } catch (err) {
       console.error('Connection Error:', err);
     }
   }
 
   private loadInitialData() {
-    // Cargamos todo en paralelo para mejor performance
     this.api.getChat(this.chatId).subscribe((data) => this.chatData.set(data));
     this.api.getUserProfile().subscribe((user) => this.userData.set(user));
     this.api.getQuickMessages().subscribe((qm) => this.quickMessages.set(qm));
     this.api
       .getChatMessages(this.chatId)
-      .subscribe((msgs) => this.chatMessages.set(this.ordenarMessages(msgs)));
-  }
-
-  private ordenarMessages(messages: IChatMessage[]) {
-    return [...messages].sort(
-      (a, b) => new Date(a.sentAt).getTime() - new Date(b.sentAt).getTime(),
-    );
+      .subscribe((msgs) => this._rawChatMessages.set(msgs));
   }
 
   onSubmitChatMessage() {
@@ -140,8 +146,6 @@ export class ChatPageComponent implements OnInit, OnDestroy {
   }
 
   async ngOnDestroy() {
-    console.log('Component Destroy');
-    this.chatMessages.set([]);
     await this.signalr.leaveGroup(this.chatId);
     this.signalr.closeConnection();
   }
