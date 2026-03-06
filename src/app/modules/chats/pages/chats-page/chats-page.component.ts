@@ -24,6 +24,9 @@ export class ChatsPageComponent implements OnInit {
   userData = signal<IUser>({
     id: '',
     fullName: '',
+    hasKeys: false,
+    publicKey: '',
+    encryptedPrivateKey: '',
   });
   showNewChatModal = signal<boolean>(false);
 

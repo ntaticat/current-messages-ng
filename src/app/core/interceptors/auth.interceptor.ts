@@ -2,10 +2,13 @@ import { HttpInterceptorFn, HttpErrorResponse } from '@angular/common/http';
 import { inject } from '@angular/core';
 import { Router } from '@angular/router';
 import { catchError, throwError } from 'rxjs';
+import { AuthService } from 'src/app/data/services/auth.service';
 
 export const authInterceptor: HttpInterceptorFn = (req, next) => {
-  const router = inject(Router); // Usamos inject() en lugar del constructor
-  const token = localStorage.getItem('conejito-messages-jwt');
+  const router = inject(Router);
+  const authService = inject(AuthService);
+
+  const token = authService.getToken();
 
   // Lógica de exclusión (Login / Register)
   const isAuthPath =
@@ -30,8 +33,6 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
   return next(authReq).pipe(
     catchError((err: HttpErrorResponse) => {
       if (err.status === 401) {
-        localStorage.removeItem('conejito-messages-jwt');
-        console.error('AuthInterceptor: Error 401');
         router.navigateByUrl('/auth/login');
       }
       return throwError(() => err);

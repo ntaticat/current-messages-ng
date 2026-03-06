@@ -29,16 +29,20 @@
     <!-- Middle - Chat -->
     <div class="chat-messages-container">
       <ul class="chat-messages">
-        @for (chatMessage of chatMessages(); track chatMessage.chatMessageId) {
+        @for (chatMessage of chatMessages(); track chatMessage.id) {
           @if (
-            userData()?.id?.toLowerCase() === chatMessage.senderId.toLowerCase()
+            userData()?.id?.toLowerCase() === chatMessage.userId.toLowerCase()
           ) {
             <div class="chat-message chat-message-mine-container">
-              <li class="chat-message-mine">{{ chatMessage.text }}</li>
+              <li class="chat-message-mine">
+                {{ chatMessage.text ?? "🔒 Descifrando..." }}
+              </li>
             </div>
           } @else {
             <div class="chat-message chat-message-friend-container">
-              <li class="chat-message-friend">{{ chatMessage.text }}</li>
+              <li class="chat-message-friend">
+                {{ chatMessage.text ?? "🔒 Descifrando..." }}
+              </li>
             </div>
           }
         } @empty {

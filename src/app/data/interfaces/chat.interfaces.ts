@@ -2,34 +2,59 @@ export interface IUser {
   id: string;
   fullName: string;
   chats?: IChat[];
+  hasKeys: boolean;
+  publicKey: string;
+  encryptedPrivateKey: string;
+}
+
+export interface IPublicKey {
+  publicKey: string;
+}
+
+export interface IChatRoomKey {
+  roomKey: string;
 }
 
 export interface IChat {
-  chatId: string;
+  id: string;
   name: string;
   createdAt: Date;
-  users?: IUser[];
+  participants: IParticipant[];
   messages?: IChatMessage[];
+  hasRoomKey: boolean;
+}
+
+export interface IParticipant {
+  id: string;
+  fullName: string;
+  hasKeys: boolean;
+  role: string;
+  joinedAt: Date;
+  lastReadAt: Date;
 }
 
 export interface IChatPost {
   name: string;
+  encryptedRoomKey: string;
 }
 
 export interface IChatMessage {
-  chatMessageId: string;
-  text: string;
+  id: string;
   sentAt: Date;
-  senderId: string;
+  userId: string;
+  text?: string;
+  encryptedText: string;
+  iv: string;
 }
 
 export interface IChatMessagePost {
   chatId: string;
-  message: string;
+  encryptedText: string;
+  iv: string;
 }
 
 export interface IQuickMessage {
-  quickMessageId: string;
+  id: string;
   text: string;
 }
 
@@ -39,4 +64,5 @@ export interface IQuickMessagePost {
 
 export interface IChatParticipantPost {
   guestId: string;
+  encryptedRoomKeyForGuest: string;
 }

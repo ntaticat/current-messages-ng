@@ -35,10 +35,10 @@
             </p>
           </div>
           <div class="chat-body">
-            @if (chat.users && chat.users.length > 1) {
+            @if (chat.participants && chat.participants.length > 1) {
               <div class="chat-participants">
                 <p>Participantes</p>
-                @for (participant of chat.users; track participant) {
+                @for (participant of chat.participants; track participant) {
                   @if (participant.id !== userData().id) {
                     <div class="chat-participant">
                       {{ participant.fullName }}
@@ -49,7 +49,7 @@
             }
             <div class="chat-actions">
               <button
-                (click)="onClickEnterChat(chat.chatId)"
+                (click)="onClickEnterChat(chat.id)"
                 class="chat-enter-button"
               >
                 Entrar al chat

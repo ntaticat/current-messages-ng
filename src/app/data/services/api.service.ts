@@ -8,6 +8,8 @@ import {
   IChatMessagePost,
   IChatParticipantPost,
   IChatPost,
+  IChatRoomKey,
+  IPublicKey,
   IQuickMessage,
   IQuickMessagePost,
   IUser,
@@ -24,6 +26,18 @@ export class ApiService {
   // 3. Uso de Template Strings optimizado
   getUserProfile(): Observable<IUser> {
     return this.http.get<IUser>(`${this.apiUrl}/Users`);
+  }
+
+  getUserPublicKey(guestId: string): Observable<IPublicKey> {
+    return this.http.get<IPublicKey>(
+      `${this.apiUrl}/Users/${guestId}/public-key`,
+    );
+  }
+
+  getMyRoomKey(chatId: string): Observable<IChatRoomKey> {
+    return this.http.get<IChatRoomKey>(
+      `${this.apiUrl}/Chats/${chatId}/my-room-key`,
+    );
   }
 
   getChat(chatId: string): Observable<IChat> {
@@ -43,7 +57,6 @@ export class ApiService {
     page = 1,
     pageSize = 50,
   ): Observable<IChatMessage[]> {
-    // 4. Se eliminan variables locales 'path' innecesarias para reducir memoria
     return this.http.get<IChatMessage[]>(
       `${this.apiUrl}/Chats/${chatId}/messages`,
       { params: { page, pageSize } }, // 5. Usa 'params' para mayor seguridad con caracteres especiales

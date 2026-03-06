@@ -1,12 +1,17 @@
 import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { shareReplay, tap } from 'rxjs';
+import { Observable, shareReplay, tap } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import {
   ILoginPost,
   IRegisterPost,
   IToken,
 } from '../interfaces/auth.interfaces';
+
+export interface IRegisterKeysPost {
+  publicKey: string;
+  encryptedPrivateKey: string; // formato "encrypted:iv"
+}
 
 @Injectable({
   providedIn: 'root',
@@ -17,9 +22,10 @@ export class AuthService {
   private readonly TOKEN_KEY = 'conejito-messages-jwt';
 
   register(data: IRegisterPost) {
-    return this.http
-      .post<string>(`${this.apiUrl}/Auth/register`, data)
-      .pipe(shareReplay());
+    return this.http.post<IToken>(`${this.apiUrl}/Auth/register`, data).pipe(
+      tap((resp) => this.saveToken(resp.token)),
+      shareReplay(),
+    );
   }
 
   login(loginPost: ILoginPost) {
@@ -27,6 +33,10 @@ export class AuthService {
       tap((resp) => this.saveToken(resp.token)),
       shareReplay(),
     );
+  }
+
+  registerKeys(data: IRegisterKeysPost) {
+    return this.http.put<void>(`${this.apiUrl}/Users/keys`, data);
   }
 
   logout() {
