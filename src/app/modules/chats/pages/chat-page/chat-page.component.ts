@@ -40,6 +40,7 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { CryptoService } from 'src/app/data/services/crypto.service';
 import { SessionCryptoService } from 'src/app/data/services/session-crypto.service';
 import { firstValueFrom } from 'rxjs';
+import { DatePipe } from '@angular/common';
 
 @Component({
   selector: 'app-chat-page',
@@ -49,6 +50,7 @@ import { firstValueFrom } from 'rxjs';
     FormsModule,
     ReactiveFormsModule,
     NewUserModalComponent,
+    DatePipe,
   ],
   templateUrl: './chat-page.component.html',
   styleUrls: ['./chat-page.component.scss'],
@@ -214,5 +216,23 @@ export class ChatPageComponent implements OnInit, OnDestroy {
 
   onClickExit() {
     this.router.navigateByUrl('/chats');
+  }
+
+  getUserName(userId: string): string {
+    const participant = this.chatData()?.participants?.find(
+      (p) => p.id.toLowerCase() === userId.toLowerCase(),
+    );
+    return participant?.fullName ?? 'Usuario desconocido';
+  }
+
+  // Si prefieres mantenerlo como función tradicional:
+  userCanAddParticipants(): boolean {
+    const userId = this.userData()?.id;
+    if (!userId) return false;
+
+    // .some() es más eficiente: se detiene en cuanto encuentra la coincidencia
+    return !!this.chatData()?.participants.some(
+      (p) => p.id === userId && ['Admin', 'Owner'].includes(p.role),
+    );
   }
 }

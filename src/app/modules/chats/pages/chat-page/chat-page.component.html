@@ -14,12 +14,14 @@
         </div>
       </div>
       <div class="chat-header-actions">
-        <button
-          (click)="showAddParticipantModal.set(true)"
-          class="chat-header-add-friend"
-        >
-          <fa-icon [icon]="icons.faUserPlus"></fa-icon>
-        </button>
+        @if (userCanAddParticipants()) {
+          <button
+            (click)="showAddParticipantModal.set(true)"
+            class="chat-header-add-friend"
+          >
+            <fa-icon [icon]="icons.faUserPlus"></fa-icon>
+          </button>
+        }
         <button (click)="onClickExit()" class="chat-header-close">
           <fa-icon [icon]="icons.faDoorOpen"></fa-icon>
         </button>
@@ -34,12 +36,19 @@
             userData()?.id?.toLowerCase() === chatMessage.userId.toLowerCase()
           ) {
             <div class="chat-message chat-message-mine-container">
+              <p>
+                {{ chatMessage.sentAt | date: "dd/MM/yy, HH:mm a" }}
+              </p>
               <li class="chat-message-mine">
                 {{ chatMessage.text ?? "🔒 Descifrando..." }}
               </li>
             </div>
           } @else {
             <div class="chat-message chat-message-friend-container">
+              <p>{{ getUserName(chatMessage.userId) }}</p>
+              <p>
+                {{ chatMessage.sentAt | date: "dd/MM/yy, HH:mm a" }}
+              </p>
               <li class="chat-message-friend">
                 {{ chatMessage.text ?? "🔒 Descifrando..." }}
               </li>
@@ -53,19 +62,6 @@
 
     <!-- Bottom - Actions -->
     <div class="chat-bottom">
-      <!-- QuickMessages -->
-      @if (quickMessages().length > 0) {
-        <ul class="chat-current-messages">
-          @for (quickMessage of quickMessages(); track quickMessage.text) {
-            <li>
-              <button class="chat-current-message">
-                {{ quickMessage.text }}
-              </button>
-            </li>
-          }
-        </ul>
-      }
-
       <!-- Enviar -->
       <form
         [formGroup]="chatForm"
