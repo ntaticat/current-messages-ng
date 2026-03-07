@@ -39,7 +39,7 @@
               <p>
                 {{ chatMessage.sentAt | date: "dd/MM/yy, HH:mm a" }}
               </p>
-              <li class="chat-message-mine">
+              <li class="chat-message-mine chat-message-text">
                 {{ chatMessage.text ?? "🔒 Descifrando..." }}
               </li>
             </div>
@@ -49,7 +49,7 @@
               <p>
                 {{ chatMessage.sentAt | date: "dd/MM/yy, HH:mm a" }}
               </p>
-              <li class="chat-message-friend">
+              <li class="chat-message-friend chat-message-text">
                 {{ chatMessage.text ?? "🔒 Descifrando..." }}
               </li>
             </div>
