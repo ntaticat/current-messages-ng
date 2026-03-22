@@ -186,8 +186,10 @@ export class ChatPageComponent implements OnInit, OnDestroy {
       return;
     }
 
+    const text = this.chatForm.controls.messageText.value;
+
     try {
-      const text = this.chatForm.controls.messageText.value;
+      this.chatForm.reset();
 
       // Cifrar el mensaje con la RoomKey cacheada
       const { encryptedText, iv } = await this.cryptoService.encryptMessage(
@@ -202,10 +204,10 @@ export class ChatPageComponent implements OnInit, OnDestroy {
       };
 
       await firstValueFrom(this.api.postChatMessage(data));
-      this.chatForm.reset();
     } catch (error) {
       alert('Error al enviar el mensaje');
       console.error(error);
+      this.chatForm.setValue({ messageText: text });
     }
   }
 
@@ -234,5 +236,9 @@ export class ChatPageComponent implements OnInit, OnDestroy {
     return !!this.chatData()?.participants.some(
       (p) => p.id === userId && ['Admin', 'Owner'].includes(p.role),
     );
+  }
+
+  onNewUserAdd() {
+    this.loadInitialData();
   }
 }

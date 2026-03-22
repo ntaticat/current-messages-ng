@@ -12,6 +12,7 @@ import { SessionCryptoService } from 'src/app/data/services/session-crypto.servi
 })
 export class NewUserModalComponent implements OnInit {
   @Output() closeModalEvent = new EventEmitter();
+  @Output() newUserAddedEvent = new EventEmitter();
   @Input() chatId: string = '';
   isLoading = false;
 
@@ -25,6 +26,10 @@ export class NewUserModalComponent implements OnInit {
 
   closeModal() {
     this.closeModalEvent.emit();
+  }
+
+  notifyNewUser() {
+    this.newUserAddedEvent.emit();
   }
 
   async onSubmitAddParticipant(guestId: string) {
@@ -67,6 +72,7 @@ export class NewUserModalComponent implements OnInit {
         encryptedRoomKeyForGuest,
       };
       await firstValueFrom(this.api.postChatParticipant(this.chatId, data));
+      this.notifyNewUser();
       this.closeModal();
     } catch (error) {
       alert('No se pudo registrar al participante en el chat');

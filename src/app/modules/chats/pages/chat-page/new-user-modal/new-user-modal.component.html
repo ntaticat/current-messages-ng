@@ -1,35 +1,168 @@
-<div class="modal-overlay">
-  <div class="modal-container">
-    <div class="modal-header">
-      <h2>Añadir Usuario</h2>
-      <p>
-        Introduce el identificador único (UUID) para iniciar la conversación.
+<div
+  class="fixed inset-0 flex items-center justify-center z-50"
+  style="
+    background: rgba(8, 5, 3, 0.92);
+    background-image: repeating-linear-gradient(
+      45deg,
+      rgba(180, 90, 48, 0.06) 0px,
+      rgba(180, 90, 48, 0.06) 1px,
+      transparent 1px,
+      transparent 12px
+    );
+  "
+>
+  <div
+    class="w-[380px] rounded-sm overflow-hidden"
+    style="
+      background: #161210;
+      border: 0.5px solid rgba(180, 90, 48, 0.25);
+      font-family: &quot;DM Sans&quot;, sans-serif;
+    "
+  >
+    <!-- Franja decorativa -->
+    <div
+      class="h-1 w-full"
+      style="
+        background: linear-gradient(
+          90deg,
+          #b45a30 0%,
+          #d4841c 33%,
+          #b45a30 66%,
+          #7c2020 100%
+        );
+      "
+    ></div>
+
+    <!-- Encabezado -->
+    <div
+      class="px-7 pt-7 pb-5 relative"
+      style="border-bottom: 0.5px solid rgba(255, 255, 255, 0.06)"
+    >
+      <span
+        class="block text-[11px] font-medium tracking-[0.18em] uppercase mb-1.5"
+        style="color: #c46a38"
+      >
+        Añadir usuario
+      </span>
+      <h2
+        class="mt-0 mb-1 text-[22px] font-normal leading-snug"
+        style="font-family: &quot;Playfair Display&quot;, serif; color: #f0eae4"
+      >
+        Invitar al chat
+      </h2>
+      <p class="text-[13px] font-light m-0" style="color: #7a6e68">
+        Introduce el identificador para iniciar la conversación
+      </p>
+      <span
+        class="absolute top-5 right-6 text-[44px] leading-none select-none"
+        style="color: #d4841c; opacity: 0.1"
+        >◈</span
+      >
+    </div>
+
+    <!-- Cuerpo -->
+    <div class="px-7 py-6">
+      <!-- Label + badge -->
+      <div class="flex items-center gap-1.5 mb-2">
+        <span
+          class="text-[11px] font-medium tracking-[0.12em] uppercase"
+          style="color: #5a524e"
+          >Identificador</span
+        >
+        <span
+          class="text-[9px] tracking-[0.1em] rounded-sm px-1.5 py-0.5"
+          style="
+            background: rgba(180, 90, 48, 0.15);
+            color: #c46a38;
+            border: 0.5px solid rgba(180, 90, 48, 0.3);
+          "
+        >
+          UUID
+        </span>
+      </div>
+
+      <!-- Input -->
+      <div class="relative">
+        <input
+          type="text"
+          id="uuid"
+          #userInput
+          placeholder="123e4567-e89b-12d3-a456-426614174000"
+          spellcheck="false"
+          class="w-full text-[13px] font-light tracking-wide rounded-sm outline-none transition-all duration-200 placeholder:italic"
+          style="
+            background: #0e0c0a;
+            color: #e8ddd6;
+            border: 0.5px solid rgba(255, 255, 255, 0.08);
+            padding: 10px 40px 10px 14px;
+            placeholder-color: #2e2a28;
+          "
+          (focus)="
+            $event.target.style.borderColor = '#B45A30';
+            $event.target.style.boxShadow = '0 0 0 2px rgba(180,90,48,0.15)'
+          "
+          (blur)="
+            $event.target.style.borderColor = 'rgba(255,255,255,0.08)';
+            $event.target.style.boxShadow = 'none'
+          "
+        />
+        <!-- Icono -->
+        <svg
+          class="absolute right-3 top-1/2 -translate-y-1/2 opacity-20"
+          width="16"
+          height="16"
+          viewBox="0 0 16 16"
+          fill="none"
+        >
+          <rect
+            x="2"
+            y="2"
+            width="12"
+            height="12"
+            rx="2"
+            stroke="#F0EAE4"
+            stroke-width="1"
+          />
+          <path
+            d="M5 8h6M8 5v6"
+            stroke="#F0EAE4"
+            stroke-width="1"
+            stroke-linecap="round"
+          />
+        </svg>
+      </div>
+
+      <!-- Hint -->
+      <p
+        class="flex items-center gap-1.5 mt-2 text-[11px] m-0"
+        style="color: #3a3330"
+      >
+        <span
+          class="w-1 h-1 rounded-full flex-shrink-0"
+          style="background: #b45a30; opacity: 0.5"
+        ></span>
+        Debe ser el identificador de otro usuario
       </p>
     </div>
 
-    <div class="modal-body">
-      <div class="input-group">
-        <label for="uuid">User ID</label>
-        <div class="input-wrapper">
-          <input
-            type="text"
-            id="uuid"
-            #userInput
-            placeholder="e.g. 123e4567-e89b-12d3-a456-426614174000"
-            spellcheck="false"
-          />
-          <div class="input-glow"></div>
-        </div>
-      </div>
-    </div>
-
-    <div class="modal-footer">
-      <button class="btn-secondary" (click)="closeModal()">Cancelar</button>
+    <!-- Pie -->
+    <div
+      class="px-7 pb-6 pt-4 flex justify-end gap-2.5"
+      style="border-top: 0.5px solid rgba(255, 255, 255, 0.06)"
+    >
       <button
-        class="btn-primary"
-        (click)="onSubmitAddParticipant(userInput.value)"
+        (click)="closeModal()"
+        class="px-[18px] py-2 text-[13px] font-normal tracking-wide rounded-sm bg-transparent transition-all duration-150"
+        style="color: #7a6e68; border: 0.5px solid rgba(255, 255, 255, 0.1)"
       >
-        Invitar al Chat
+        Cancelar
+      </button>
+      <button
+        (click)="onSubmitAddParticipant(userInput.value)"
+        class="flex items-center gap-1.5 px-[22px] py-2 text-[13px] font-medium tracking-[0.1em] uppercase rounded-sm transition-all duration-150 active:scale-[0.98]"
+        style="background: #b45a30; color: #fff5ee; border: none"
+      >
+        Invitar <span style="opacity: 0.7">→</span>
       </button>
     </div>
   </div>

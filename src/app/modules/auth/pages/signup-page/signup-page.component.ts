@@ -24,6 +24,17 @@ import { SessionCryptoService } from 'src/app/data/services/session-crypto.servi
 export class SignupPageComponent implements OnInit {
   registerForm: UntypedFormGroup;
   isLoading = false;
+  readonly nivelesMictlan = [
+    'I · Itzcuintlan — el río de los perros',
+    'II · Tepeme Monamictlan — cerros que chocan',
+    'III · Iztepetl — campo de obsidiana',
+    'IV · Iztehecayan — viento de pedernal',
+    'V · Pancuecuetlacayan — banderas de viento',
+    'VI · Timiminaloayan — flechas de lluvia',
+    'VII · Teocoyocualloa — bestias devoradoras',
+    'VIII · Apanohuacalhuia — el río negro',
+    'IX · Chiconahui Mictlan — el descanso eterno',
+  ];
 
   constructor(
     private formBuilder: UntypedFormBuilder,
