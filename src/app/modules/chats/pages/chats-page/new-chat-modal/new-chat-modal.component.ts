@@ -1,4 +1,4 @@
-import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, OnInit, Output, ChangeDetectionStrategy } from '@angular/core';
 import { firstValueFrom } from 'rxjs';
 import { IChatPost } from 'src/app/data/interfaces/chat.interfaces';
 import { ApiService } from 'src/app/data/services/api.service';
@@ -7,6 +7,7 @@ import { CryptoService } from 'src/app/data/services/crypto.service';
 @Component({
   selector: 'app-new-chat-modal',
   templateUrl: './new-chat-modal.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrls: ['./new-chat-modal.component.scss'],
 })
 export class NewChatModalComponent implements OnInit {

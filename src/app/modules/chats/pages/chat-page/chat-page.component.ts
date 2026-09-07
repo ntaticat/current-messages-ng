@@ -8,6 +8,7 @@ import {
   computed,
   Injector,
   DestroyRef,
+  ChangeDetectionStrategy
 } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import {
@@ -53,6 +54,7 @@ import { DatePipe } from '@angular/common';
     DatePipe,
   ],
   templateUrl: './chat-page.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrls: ['./chat-page.component.scss'],
 })
 export class ChatPageComponent implements OnInit, OnDestroy {

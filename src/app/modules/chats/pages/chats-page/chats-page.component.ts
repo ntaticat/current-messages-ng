@@ -5,6 +5,7 @@ import {
   inject,
   DestroyRef,
   AfterViewInit,
+  ChangeDetectionStrategy
 } from '@angular/core';
 import { Router } from '@angular/router';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
@@ -18,6 +19,7 @@ import { NewChatModalComponent } from './new-chat-modal/new-chat-modal.component
   standalone: true, // Aseguramos que sea explícito
   imports: [CdkCopyToClipboard, NewChatModalComponent],
   templateUrl: './chats-page.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './chats-page.component.scss',
 })
 export class ChatsPageComponent implements OnInit, AfterViewInit {

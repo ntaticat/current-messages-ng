@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import {
   UntypedFormBuilder,
   UntypedFormGroup,
@@ -19,6 +19,7 @@ import { SessionCryptoService } from 'src/app/data/services/session-crypto.servi
   standalone: true,
   templateUrl: './signup-page.component.html',
   styleUrl: './signup-page.component.scss',
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [FormsModule, ReactiveFormsModule, RouterLink],
 })
 export class SignupPageComponent implements OnInit {

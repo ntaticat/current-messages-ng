@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output, ChangeDetectionStrategy } from '@angular/core';
 import { firstValueFrom } from 'rxjs';
 import { IChatParticipantPost } from 'src/app/data/interfaces/chat.interfaces';
 import { ApiService } from 'src/app/data/services/api.service';
@@ -8,6 +8,7 @@ import { SessionCryptoService } from 'src/app/data/services/session-crypto.servi
 @Component({
   selector: 'app-new-user-modal',
   templateUrl: './new-user-modal.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrls: ['./new-user-modal.component.scss'],
 })
 export class NewUserModalComponent implements OnInit {

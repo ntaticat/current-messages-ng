@@ -1,8 +1,6 @@
-/* To learn more about this file see: https://angular.io/config/tsconfig. */
 {
   "compileOnSave": false,
   "compilerOptions": {
-    "baseUrl": "./",
     "outDir": "./dist/out-tsc",
     "forceConsistentCasingInFileNames": true,
     "esModuleInterop": true,
@@ -18,7 +16,13 @@
     "target": "ES2023",
     "module": "esnext",
     "lib": ["es2023", "dom"],
-    "useDefineForClassFields": false
+    "useDefineForClassFields": false,
+    "paths": {
+      "src/*": ["./src/*"],
+      "@app/*": ["./src/app/*"],
+      "@core/*": ["./src/app/core/*"],
+      "@data/*": ["./src/app/data/*"]
+    }
   },
   "angularCompilerOptions": {
     "strictInjectionParameters": true,
