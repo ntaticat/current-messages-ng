@@ -1,352 +1,158 @@
-<!-- register.component.html -->
-<!--
-  styles.scss global (mismas fuentes del login):
-  @keyframes respirar {
-    0%,100% { filter:drop-shadow(0 0 10px rgba(200,191,160,0.1)); }
-    50%      { filter:drop-shadow(0 0 22px rgba(200,191,160,0.22)); }
-  }
-  @keyframes flotar {
-    0%  { opacity:0;   transform:translateY(100vh) translateX(0); }
-    10% { opacity:0.4; }
-    90% { opacity:0.2; }
-    100%{ opacity:0;   transform:translateY(-20px) translateX(var(--dx)); }
-  }
--->
-
-<!-- Fondo abismo -->
+<!-- signup-page.component.html -->
 <div
-  class="fixed inset-0 z-0 bg-[#03050a]"
-  style="
-    background-image:
-      url(&quot;data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='500' height='500'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='6' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0.1'/%3E%3C/filter%3E%3Crect width='500' height='500' filter='url(%23n)' opacity='0.06'/%3E%3C/svg%3E&quot;),
-      radial-gradient(ellipse at 50% 0%, rgba(13, 20, 40, 0.9) 0%, #03050a 55%);
-  "
-></div>
-
-<!-- Los nueve niveles del Mictlán como estratos -->
-<div
-  class="fixed inset-0 z-0 pointer-events-none"
-  style="
-    background-image: repeating-linear-gradient(
-      0deg,
-      transparent 0px,
-      transparent calc(11.11vh - 1px),
-      rgba(200, 191, 160, 0.025) calc(11.11vh - 1px),
-      rgba(200, 191, 160, 0.025) 11.11vh
-    );
-  "
-></div>
-
-<!-- Xólotl — perro guía, silueta al fondo -->
-<svg
-  class="fixed bottom-0 left-1/2 z-0 -translate-x-1/2 pointer-events-none opacity-[0.04]"
-  style="width: min(50vw, 280px)"
-  viewBox="0 0 200 120"
-  xmlns="http://www.w3.org/2000/svg"
-  fill="none"
+  class="flex min-h-dvh w-full items-center justify-center bg-gradient-to-b from-[#0a1020] to-[#03050a] px-4 py-10 font-body"
 >
-  <ellipse cx="100" cy="90" rx="55" ry="18" fill="#c8bfa0" />
-  <ellipse cx="72" cy="72" rx="28" ry="18" fill="#c8bfa0" />
-  <ellipse cx="58" cy="56" rx="14" ry="20" fill="#c8bfa0" />
-  <ellipse cx="46" cy="42" rx="18" ry="15" fill="#c8bfa0" />
-  <ellipse cx="32" cy="48" rx="10" ry="7" fill="#c8bfa0" />
-  <ellipse
-    cx="52"
-    cy="28"
-    rx="5"
-    ry="14"
-    fill="#c8bfa0"
-    transform="rotate(-15 52 28)"
-  />
-  <circle cx="40" cy="40" r="3" fill="#03050a" />
-  <rect x="62" y="98" width="8" height="18" rx="4" fill="#c8bfa0" />
-  <rect x="80" y="98" width="8" height="18" rx="4" fill="#c8bfa0" />
-  <rect x="115" y="98" width="8" height="18" rx="4" fill="#c8bfa0" />
-  <rect x="133" y="98" width="8" height="18" rx="4" fill="#c8bfa0" />
-  <path
-    d="M155 85 Q175 65 168 50"
-    stroke="#c8bfa0"
-    stroke-width="7"
-    stroke-linecap="round"
-    fill="none"
-  />
-</svg>
-
-<!-- Contenido -->
-<div
-  class="relative z-10 flex min-h-dvh w-full items-center justify-center px-4 py-10 font-body"
->
-  <div class="w-full max-w-[440px]">
-    <!-- ════ ESTELA ════ -->
+  <div class="w-full max-w-[380px]">
     <div
-      class="relative border border-[rgba(200,191,160,0.18)] shadow-[0_0_0_3px_#03050a,0_0_0_4px_rgba(200,191,160,0.06),inset_0_0_40px_rgba(0,0,0,0.8),0_20px_80px_rgba(0,0,0,0.9)]"
-      style="
-        background-color: #080d18;
-        background-image:
-          url(&quot;data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='turbulence' baseFrequency='0.6' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0.05'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)' opacity='0.14'/%3E%3C/svg%3E&quot;),
-          linear-gradient(180deg, #0d1428 0%, #080d18 45%, #050810 100%);
-      "
+      class="rounded-2xl border border-[#c8bfa0]/20 bg-[#080d18] p-8 shadow-[0_20px_60px_rgba(0,0,0,0.6)]"
     >
-      <!-- Franja superior hueso -->
+      <!-- Emblema simple -->
       <div
-        class="h-[3px] w-full"
-        style="
-          background: linear-gradient(
-            90deg,
-            transparent 0%,
-            rgba(200, 191, 160, 0.06) 20%,
-            rgba(200, 191, 160, 0.1) 50%,
-            rgba(200, 191, 160, 0.06) 80%,
-            transparent 100%
-          );
-        "
-      ></div>
-
-      <!-- Cabecera -->
-      <div class="px-7 pt-8 pb-6 text-center">
-        <!-- Cráneo SVG de Mictlantecuhtli -->
-        <div
-          class="mx-auto mb-4 flex h-16 w-16 items-center justify-center"
-          style="animation: respirar 5s ease-in-out infinite"
-        >
-          <svg
-            viewBox="0 0 64 64"
-            xmlns="http://www.w3.org/2000/svg"
-            class="h-16 w-16"
-          >
-            <ellipse
-              cx="32"
-              cy="28"
-              rx="20"
-              ry="22"
-              fill="none"
-              stroke="#c8bfa0"
-              stroke-width="1.5"
-              opacity="0.7"
-            />
-            <path
-              d="M18 24 l5-4 l5 4 l-5 4z"
-              fill="#03050a"
-              stroke="#c8bfa0"
-              stroke-width="1"
-              opacity="0.8"
-            />
-            <path
-              d="M36 24 l5-4 l5 4 l-5 4z"
-              fill="#03050a"
-              stroke="#c8bfa0"
-              stroke-width="1"
-              opacity="0.8"
-            />
-            <path
-              d="M29 33 l3-4 l3 4z"
-              fill="#03050a"
-              stroke="#c8bfa0"
-              stroke-width="0.8"
-              opacity="0.7"
-            />
-            <path
-              d="M20 44 h24"
-              stroke="#c8bfa0"
-              stroke-width="1"
-              opacity="0.5"
-            />
-            <path
-              d="M22 44 v5 M26 44 v5 M30 44 v5 M34 44 v5 M38 44 v5 M42 44 v5"
-              stroke="#c8bfa0"
-              stroke-width="1.2"
-              stroke-linecap="square"
-              opacity="0.55"
-            />
-            <path
-              d="M20 44 Q20 52 32 53 Q44 52 44 44"
-              fill="none"
-              stroke="#c8bfa0"
-              stroke-width="1.2"
-              opacity="0.6"
-            />
-            <path
-              d="M32 6 Q28 14 32 20 Q36 14 32 6"
-              fill="none"
-              stroke="#c8bfa0"
-              stroke-width="0.8"
-              opacity="0.35"
-            />
-            <circle
-              cx="32"
-              cy="10"
-              r="3"
-              fill="none"
-              stroke="#c8bfa0"
-              stroke-width="0.8"
-              opacity="0.4"
-            />
-            <!-- Jade en la boca -->
-            <circle cx="26" cy="49" r="1.5" fill="rgba(26,74,58,0.8)" />
-            <circle cx="32" cy="50" r="1.5" fill="rgba(26,74,58,0.8)" />
-            <circle cx="38" cy="49" r="1.5" fill="rgba(26,74,58,0.8)" />
-          </svg>
-        </div>
-
-        <h1
-          class="font-display text-[14px] font-black uppercase leading-snug tracking-[0.1em] text-[#e0d8c0]"
-          style="
-            text-shadow:
-              0 0 30px rgba(200, 191, 160, 0.2),
-              0 2px 4px rgba(0, 0, 0, 1);
-          "
-        >
-          Registro
-        </h1>
+        class="mx-auto mb-5 flex h-12 w-12 items-center justify-center rounded-full border border-[#c8bfa0]/40"
+      >
+        <span class="text-xl text-[#c8bfa0]" aria-hidden="true">✦</span>
       </div>
 
-      <!-- Franja jade -->
-      <div
-        class="h-[3px] w-full mb-5"
-        style="
-          background: linear-gradient(
-            90deg,
-            transparent 0%,
-            rgba(26, 74, 58, 0.15) 20%,
-            rgba(26, 74, 58, 0.25) 50%,
-            rgba(26, 74, 58, 0.15) 80%,
-            transparent 100%
-          );
-        "
-      ></div>
-
-      <!-- Formulario -->
-      <form
-        [formGroup]="registerForm"
-        (ngSubmit)="onSubmit()"
-        class="px-7 pb-7"
+      <h1
+        class="text-center font-display text-base font-bold uppercase tracking-wide text-[#e0d8c0]"
       >
+        Crear cuenta
+      </h1>
+      <p class="mt-1 text-center text-xs italic text-[#c8bfa0]/50">
+        Comienza tu camino
+      </p>
+
+      <!-- Banner de error -->
+       @if (errorMessage) {
+        <div
+        role="alert"
+        class="mt-5 rounded-lg border border-red-500/30 bg-red-900/20 px-3 py-2 text-xs text-red-200"
+      >
+        {{ errorMessage }}
+      </div>  
+       }
+      
+
+      <form [formGroup]="registerForm" (ngSubmit)="onSubmit()" class="mt-6 space-y-5">
         <!-- Nombre -->
-        <div class="mb-6">
+        <div>
           <label
-            class="mb-2 block font-display text-[8.5px] uppercase tracking-[0.16em] text-[rgba(200,191,160,0.4)]"
             for="fullName"
-            style="text-shadow: 0 1px 2px rgba(0, 0, 0, 0.9)"
+            class="mb-1.5 block text-[10px] uppercase tracking-wide text-[#c8bfa0]/60"
           >
-            <span
-              class="mr-2 inline-flex h-[14px] w-[14px] rotate-45 items-center justify-center border border-[rgba(26,74,58,0.5)] align-middle font-display text-[7px] text-[rgba(26,74,58,0.9)]"
-              >I</span
-            >
-            Nombre o identificador
+            Nombre
           </label>
           <input
             id="fullName"
-            class="w-full border-b border-b-[rgba(200,191,160,0.15)] border-t border-t-[rgba(0,0,0,0.4)] border-l-2 border-l-transparent bg-[rgba(0,0,0,0.4)] px-3 py-2.5 font-body text-[15px] text-[#e0d8c0] outline-none tracking-[0.03em] caret-[#c8bfa0] placeholder-[rgba(200,191,160,0.15)] placeholder:italic shadow-[inset_0_3px_8px_rgba(0,0,0,0.6)] transition-all duration-300 focus:border-l-[rgba(26,74,58,0.7)] focus:border-b-[rgba(200,191,160,0.35)] focus:bg-[rgba(13,20,40,0.5)] focus:shadow-[inset_0_3px_8px_rgba(0,0,0,0.6),-4px_0_12px_rgba(26,74,58,0.15)]"
             type="text"
-            name="fullName"
             formControlName="fullName"
-            placeholder="Juanito Perez"
-            autocomplete="off"
+            autocomplete="name"
+            [disabled]="isLoading"
+            placeholder="Juanito Pérez"
+            class="w-full rounded-lg border border-[#c8bfa0]/20 bg-black/20 px-3 py-2.5 text-sm text-[#e0d8c0] outline-none transition focus:border-[#c8bfa0]/60 focus:bg-black/30 disabled:opacity-50"
           />
+          @if (registerForm.get('fullName')?.invalid && registerForm.get('fullName')?.touched) {
+            
+            <p
+              class="mt-1 text-[11px] text-red-300"
+            >
+              Ingresa al menos 3 caracteres.
+            </p>
+          }
         </div>
 
         <!-- Email -->
-        <div class="mb-6">
+        <div>
           <label
-            class="mb-2 block font-display text-[8.5px] uppercase tracking-[0.16em] text-[rgba(200,191,160,0.4)]"
             for="email"
-            style="text-shadow: 0 1px 2px rgba(0, 0, 0, 0.9)"
+            class="mb-1.5 block text-[10px] uppercase tracking-wide text-[#c8bfa0]/60"
           >
-            <span
-              class="mr-2 inline-flex h-[14px] w-[14px] rotate-45 items-center justify-center border border-[rgba(26,74,58,0.5)] align-middle font-display text-[7px] text-[rgba(26,74,58,0.9)]"
-              >II</span
-            >
             Correo electrónico
           </label>
           <input
             id="email"
-            class="w-full border-b border-b-[rgba(200,191,160,0.15)] border-t border-t-[rgba(0,0,0,0.4)] border-l-2 border-l-transparent bg-[rgba(0,0,0,0.4)] px-3 py-2.5 font-body text-[15px] text-[#e0d8c0] outline-none tracking-[0.03em] caret-[#c8bfa0] placeholder-[rgba(200,191,160,0.15)] placeholder:italic shadow-[inset_0_3px_8px_rgba(0,0,0,0.6)] transition-all duration-300 focus:border-l-[rgba(26,74,58,0.7)] focus:border-b-[rgba(200,191,160,0.35)] focus:bg-[rgba(13,20,40,0.5)] focus:shadow-[inset_0_3px_8px_rgba(0,0,0,0.6),-4px_0_12px_rgba(26,74,58,0.15)]"
             type="email"
-            name="email"
             formControlName="email"
+            autocomplete="email"
+            [disabled]="isLoading"
             placeholder="nombre@email.com"
-            autocomplete="off"
+            class="w-full rounded-lg border border-[#c8bfa0]/20 bg-black/20 px-3 py-2.5 text-sm text-[#e0d8c0] outline-none transition focus:border-[#c8bfa0]/60 focus:bg-black/30 disabled:opacity-50"
           />
+          @if (registerForm.get('email')?.invalid && registerForm.get('email')?.touched) {
+            <p
+              class="mt-1 text-[11px] text-red-300"
+            >
+              Ingresa un correo válido.
+            </p>
+            
+          }
         </div>
 
         <!-- Password -->
-        <div class="mb-8">
+        <div>
           <label
-            class="mb-2 block font-display text-[8.5px] uppercase tracking-[0.16em] text-[rgba(200,191,160,0.4)]"
             for="password"
-            style="text-shadow: 0 1px 2px rgba(0, 0, 0, 0.9)"
+            class="mb-1.5 block text-[10px] uppercase tracking-wide text-[#c8bfa0]/60"
           >
-            <span
-              class="mr-2 inline-flex h-[14px] w-[14px] rotate-45 items-center justify-center border border-[rgba(26,74,58,0.5)] align-middle font-display text-[7px] text-[rgba(26,74,58,0.9)]"
-              >III</span
-            >
             Contraseña
           </label>
           <input
             id="password"
-            class="w-full border-b border-b-[rgba(200,191,160,0.15)] border-t border-t-[rgba(0,0,0,0.4)] border-l-2 border-l-transparent bg-[rgba(0,0,0,0.4)] px-3 py-2.5 font-body text-[15px] text-[#e0d8c0] outline-none tracking-[0.03em] caret-[#c8bfa0] placeholder-[rgba(200,191,160,0.15)] placeholder:italic shadow-[inset_0_3px_8px_rgba(0,0,0,0.6)] transition-all duration-300 focus:border-l-[rgba(26,74,58,0.7)] focus:border-b-[rgba(200,191,160,0.35)] focus:bg-[rgba(13,20,40,0.5)] focus:shadow-[inset_0_3px_8px_rgba(0,0,0,0.6),-4px_0_12px_rgba(26,74,58,0.15)]"
             type="password"
-            name="password"
             formControlName="password"
+            autocomplete="new-password"
+            [disabled]="isLoading"
             placeholder="••••••••"
+            class="w-full rounded-lg border border-[#c8bfa0]/20 bg-black/20 px-3 py-2.5 text-sm text-[#e0d8c0] outline-none transition focus:border-[#c8bfa0]/60 focus:bg-black/30 disabled:opacity-50"
           />
+          @if (registerForm.get('password')?.invalid && registerForm.get('password')?.touched) {
+            
+            <p
+              class="mt-1 text-[11px] text-red-300"
+            >
+              Mínimo 3 caracteres.
+            </p>
+          }
         </div>
 
-        <!-- Botón -->
+        <!-- Botón principal -->
         <button
           type="submit"
-          class="group relative mb-5 w-full cursor-pointer overflow-hidden border border-t-[rgba(200,191,160,0.4)] border-[rgba(200,191,160,0.25)] px-4 py-3.5 font-display text-[10.5px] font-bold uppercase tracking-[0.14em] text-[#c8bfa0] shadow-[inset_0_1px_0_rgba(255,255,255,0.03)] transition-all duration-300 hover:border-[rgba(200,191,160,0.5)] hover:text-[#e0d8c0] hover:shadow-[0_0_30px_rgba(200,191,160,0.06),inset_0_1px_0_rgba(255,255,255,0.05)] hover:[text-shadow:0_0_16px_rgba(200,191,160,0.3),0_1px_4px_rgba(0,0,0,0.9)] active:scale-[0.99] active:shadow-[inset_0_3px_8px_rgba(0,0,0,0.7)]"
-          style="
-            background-image: linear-gradient(180deg, #111d3a 0%, #0a1020 100%);
-            text-shadow: 0 1px 4px rgba(0, 0, 0, 0.9);
-          "
+          [disabled]="isLoading"
+          [attr.aria-busy]="isLoading"
+          class="flex w-full items-center justify-center gap-2 rounded-lg bg-gradient-to-b from-[#111d3a] to-[#080d18] border border-[#c8bfa0]/30 px-4 py-3 text-xs font-bold uppercase tracking-wide text-[#c8bfa0] transition hover:border-[#c8bfa0]/60 hover:text-[#e0d8c0] disabled:cursor-not-allowed disabled:opacity-70"
         >
-          <!-- Barrido de luz al hover -->
+        @if (isLoading) {
+          
           <span
-            class="absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-[rgba(200,191,160,0.06)] to-transparent transition-transform duration-500 group-hover:translate-x-full"
-          >
-          </span>
-          Registrarse
+            class="h-3.5 w-3.5 animate-spin rounded-full border-2 border-[#c8bfa0]/30 border-t-[#c8bfa0]"
+            aria-hidden="true"
+          ></span>
+        }
+          <span>{{ isLoading ? 'Creando cuenta…' : 'Registrarse' }}</span>
         </button>
+
+        <!-- Aviso de conexión lenta -->
+        @if (isSlow) {
+          <p
+            aria-live="polite"
+            class="text-center text-[11px] text-[#c8bfa0]/50"
+          >
+            Generando tus claves de seguridad, esto puede tardar unos segundos…
+          </p>
+          
+        }
 
         <!-- Link login -->
         <div class="text-center">
           <a
             routerLink="../login"
-            class="font-display text-[9px] uppercase tracking-[0.1em] text-[rgba(200,191,160,0.75)] no-underline transition-all duration-200 hover:text-[rgba(200,191,160,1)] hover:[text-shadow:0_0_12px_rgba(200,191,160,0.4)]"
+            class="text-[11px] text-[#c8bfa0]/60 no-underline transition hover:text-[#e0d8c0]"
           >
-            ¿Ya estás registrado? Iniciar sesión
+            ¿Ya tienes cuenta? Inicia sesión
           </a>
         </div>
       </form>
-
-      <!-- Franjas inferiores -->
-      <div
-        class="h-[3px] w-full"
-        style="
-          background: linear-gradient(
-            90deg,
-            transparent 0%,
-            rgba(26, 74, 58, 0.15) 20%,
-            rgba(26, 74, 58, 0.25) 50%,
-            rgba(26, 74, 58, 0.15) 80%,
-            transparent 100%
-          );
-        "
-      ></div>
-      <div
-        class="h-[3px] w-full"
-        style="
-          background: linear-gradient(
-            90deg,
-            transparent 0%,
-            rgba(200, 191, 160, 0.06) 20%,
-            rgba(200, 191, 160, 0.1) 50%,
-            rgba(200, 191, 160, 0.06) 80%,
-            transparent 100%
-          );
-        "
-      ></div>
     </div>
   </div>
 </div>

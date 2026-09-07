@@ -1,4 +1,5 @@
-import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { Component, OnInit, ChangeDetectionStrategy, OnDestroy } from '@angular/core';
 import {
   UntypedFormBuilder,
   UntypedFormGroup,
@@ -20,22 +21,16 @@ import { SessionCryptoService } from 'src/app/data/services/session-crypto.servi
   templateUrl: './signup-page.component.html',
   styleUrl: './signup-page.component.scss',
   changeDetection: ChangeDetectionStrategy.Eager,
-  imports: [FormsModule, ReactiveFormsModule, RouterLink],
+  imports: [CommonModule,FormsModule, ReactiveFormsModule, RouterLink],
 })
-export class SignupPageComponent implements OnInit {
+export class SignupPageComponent implements OnInit, OnDestroy {
   registerForm: UntypedFormGroup;
   isLoading = false;
-  readonly nivelesMictlan = [
-    'I · Itzcuintlan — el río de los perros',
-    'II · Tepeme Monamictlan — cerros que chocan',
-    'III · Iztepetl — campo de obsidiana',
-    'IV · Iztehecayan — viento de pedernal',
-    'V · Pancuecuetlacayan — banderas de viento',
-    'VI · Timiminaloayan — flechas de lluvia',
-    'VII · Teocoyocualloa — bestias devoradoras',
-    'VIII · Apanohuacalhuia — el río negro',
-    'IX · Chiconahui Mictlan — el descanso eterno',
-  ];
+  isSlow = false;
+  errorMessage: string | null = null;
+
+  private readonly SLOW_THRESHOLD_MS = 4000;
+  private slowTimer: ReturnType<typeof setTimeout> | null = null;
 
   constructor(
     private formBuilder: UntypedFormBuilder,
@@ -58,15 +53,24 @@ export class SignupPageComponent implements OnInit {
     await this.keyStorage.clear();
   }
 
+  async ngOnDestroy() {
+    this.clearSlowTimer();
+  }
+
   async onSubmit() {
+    this.errorMessage = null;
+
     if (this.registerForm.invalid) {
-      alert('El formulario no es valido');
+      this.registerForm.markAllAsTouched();
       return;
     }
 
     this.isLoading = true;
+    this.isSlow = false;
+    this.startSlowTimer();
 
     const { fullName, email, password } = this.registerForm.value;
+    let accountCreated = false;
 
     try {
       // 1. Crear cuenta en el servidor
@@ -77,6 +81,7 @@ export class SignupPageComponent implements OnInit {
       };
 
       await firstValueFrom(this.authService.register(registerPost));
+      accountCreated = true;
 
       // 2. Generar par de claves RSA en el cliente
       const keyPair = await this.cryptoService.generateKeyPair();
@@ -112,10 +117,27 @@ export class SignupPageComponent implements OnInit {
 
       this.router.navigateByUrl('/chats');
     } catch (error) {
-      alert('No se pudo registrar el usuario');
+      this.errorMessage = accountCreated
+        ? 'Tu cuenta se creó, pero hubo un problema configurando tus claves. Intenta iniciar sesión o contacta soporte.'
+        : 'No se pudo crear la cuenta. Verifica tus datos e inténtalo de nuevo.';
       console.error(error);
     } finally {
       this.isLoading = false;
+      this.isSlow = false;
+      this.clearSlowTimer();
+    }
+  }
+
+  private startSlowTimer() {
+    this.slowTimer = setTimeout(() => {
+      this.isSlow = true;
+    }, this.SLOW_THRESHOLD_MS);
+  }
+
+  private clearSlowTimer() {
+    if (this.slowTimer) {
+      clearTimeout(this.slowTimer);
+      this.slowTimer = null;
     }
   }
 }

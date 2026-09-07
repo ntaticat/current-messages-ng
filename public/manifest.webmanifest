@@ -8,38 +8,26 @@
   "start_url": "/",
   "icons": [
     {
-      "src": "icons/coneja-72x72.png",
-      "sizes": "72x72",
-      "type": "image/png",
-      "purpose": "maskable"
-    },
-    {
-      "src": "icons/coneja-96x96.png",
+      "src": "icons/kawaiimessage-96x96.png",
       "sizes": "96x96",
       "type": "image/png",
       "purpose": "maskable"
     },
     {
-      "src": "icons/coneja-144x144.png",
-      "sizes": "144x144",
+      "src": "icons/kawaiimessage-128x128.png",
+      "sizes": "128x128",
       "type": "image/png",
       "purpose": "maskable"
     },
     {
-      "src": "icons/coneja-192x192.png",
-      "sizes": "192x192",
+      "src": "kawaiimessage-256x256.png",
+      "sizes": "256x256",
       "type": "image/png",
       "purpose": "maskable"
     },
     {
-      "src": "icons/coneja-512x512.png",
-      "sizes": "512x512",
-      "type": "image/png",
-      "purpose": "maskable"
-    },
-    {
-      "src": "icons/coneja-1024x1024.png",
-      "sizes": "1024x1024",
+      "src": "kawaiimessage-736x736.png",
+      "sizes": "736x736",
       "type": "image/png",
       "purpose": "maskable"
     }
@@ -53,11 +41,11 @@
       "label": "Vista de chat móvil"
     },
     {
-      "src": "screenshots/desktop.png",
+      "src": "screenshots/image.png",
       "sizes": "1920x1080",
       "type": "image/png",
       "form_factor": "wide",
-      "label": "Vista de mensajes escritorio"
+      "label": "Vista de chats escritorio"
     }
   ]
 }

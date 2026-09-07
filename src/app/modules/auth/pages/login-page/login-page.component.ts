@@ -1,4 +1,4 @@
-import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy, OnDestroy } from '@angular/core';
 import {
   UntypedFormBuilder,
   UntypedFormGroup,
@@ -23,9 +23,16 @@ import { SessionCryptoService } from 'src/app/data/services/session-crypto.servi
   changeDetection: ChangeDetectionStrategy.Eager,
   imports: [FormsModule, ReactiveFormsModule, RouterLink],
 })
-export class LoginPageComponent implements OnInit {
+export class LoginPageComponent implements OnInit, OnDestroy {
   loginForm: UntypedFormGroup;
   isLoading = false;
+
+  isSlow = false;
+  errorMessage: string | null = null;
+
+  // Si el backend tarda más de esto, mostramos un aviso adicional
+  private readonly SLOW_THRESHOLD_MS = 4000;
+  private slowTimer: ReturnType<typeof setTimeout> | null = null;
 
   constructor(
     private formBuilder: UntypedFormBuilder,
@@ -48,13 +55,21 @@ export class LoginPageComponent implements OnInit {
     await this.keyStorage.clear();
   }
 
+  async ngOnDestroy() {
+    this.clearSlowTimer();
+  }
+
   async onSubmit() {
+    this.errorMessage = null;
+
     if (this.loginForm.invalid) {
-      alert('El formulario no es valido');
+      this.loginForm.markAllAsTouched();
       return;
     }
 
     this.isLoading = true;
+    this.isSlow = false;
+    this.startSlowTimer();
 
     const { email, password } = this.loginForm.value;
 
@@ -97,10 +112,26 @@ export class LoginPageComponent implements OnInit {
 
       this.router.navigateByUrl('/chats');
     } catch (error) {
-      alert('No se pudo iniciar sesión');
+      this.errorMessage =
+        'No se pudo iniciar sesión. Verifica tus datos e inténtalo de nuevo.';
       console.error(error);
     } finally {
       this.isLoading = false;
+      this.isSlow = false;
+      this.clearSlowTimer();
+    }
+  }
+
+  private startSlowTimer() {
+    this.slowTimer = setTimeout(() => {
+      this.isSlow = true;
+    }, this.SLOW_THRESHOLD_MS);
+  }
+
+  private clearSlowTimer() {
+    if (this.slowTimer) {
+      clearTimeout(this.slowTimer);
+      this.slowTimer = null;
     }
   }
 }

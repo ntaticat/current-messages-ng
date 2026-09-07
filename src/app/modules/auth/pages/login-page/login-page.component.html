@@ -1,381 +1,118 @@
-<!-- login.component.html -->
-<!--
-  En styles.scss global (ya deberías tener estas desde el chat):
-  @import url('https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700;900&family=IM+Fell+English:ital@0;1&display=swap');
-
-  @keyframes pulso-brasero {
-    0%,100% { opacity:.7; transform:translateX(-50%) scaleX(1); }
-    50%      { opacity:1;  transform:translateX(-50%) scaleX(1.08); }
-  }
-  @keyframes girar-lento { to { transform: rotate(360deg); } }
-
-  En tailwind.config.js (igual que antes con Cinzel Decorative + IM Fell English)
--->
-
-<!-- Fondo obsidiana con textura -->
+<!-- login-page.component.html -->
 <div
-  class="fixed inset-0 z-0 bg-[#0a0704]"
-  style="
-    background-image:
-      url(&quot;data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='400'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='5' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='400' height='400' filter='url(%23n)' opacity='0.07'/%3E%3C/svg%3E&quot;),
-      radial-gradient(ellipse at 50% 50%, #150b05 0%, #0a0704 60%, #050302 100%);
-  "
-></div>
-
-<!-- Brasero: resplandor de fuego bajo -->
-<div
-  class="fixed bottom-[-120px] left-1/2 z-0 h-[300px] w-[500px] -translate-x-1/2 pointer-events-none"
-  style="
-    background: radial-gradient(
-      ellipse,
-      rgba(168, 50, 21, 0.18) 0%,
-      rgba(201, 168, 76, 0.06) 40%,
-      transparent 70%
-    );
-    animation: pulso-brasero 4s ease-in-out infinite;
-  "
-></div>
-
-<!-- Sol grande decorativo de fondo -->
-<svg
-  class="fixed left-1/2 top-1/2 z-0 -translate-x-1/2 -translate-y-1/2 pointer-events-none opacity-[0.025]"
-  style="width: min(80vw, 500px); height: min(80vw, 500px)"
-  viewBox="0 0 200 200"
-  xmlns="http://www.w3.org/2000/svg"
+  class="flex min-h-dvh w-full items-center justify-center bg-gradient-to-b from-[#20120a] to-[#0f0805] px-4 py-10 font-body"
 >
-  <circle
-    cx="100"
-    cy="100"
-    r="95"
-    fill="none"
-    stroke="#c9a84c"
-    stroke-width="2"
-  />
-  <circle
-    cx="100"
-    cy="100"
-    r="80"
-    fill="none"
-    stroke="#c9a84c"
-    stroke-width="1"
-  />
-  <circle
-    cx="100"
-    cy="100"
-    r="65"
-    fill="none"
-    stroke="#c9a84c"
-    stroke-width="2"
-  />
-  <circle
-    cx="100"
-    cy="100"
-    r="50"
-    fill="none"
-    stroke="#c9a84c"
-    stroke-width="1"
-  />
-  <g stroke="#c9a84c" stroke-width="1.5">
-    <line x1="100" y1="5" x2="100" y2="20" />
-    <line x1="100" y1="180" x2="100" y2="195" />
-    <line x1="5" y1="100" x2="20" y2="100" />
-    <line x1="180" y1="100" x2="195" y2="100" />
-    <line x1="30" y1="30" x2="40" y2="40" />
-    <line x1="160" y1="30" x2="150" y2="40" />
-    <line x1="30" y1="170" x2="40" y2="160" />
-    <line x1="160" y1="170" x2="150" y2="160" />
-  </g>
-  <text
-    x="100"
-    y="104"
-    text-anchor="middle"
-    font-size="22"
-    fill="#c9a84c"
-    font-family="serif"
-  >
-    ✦
-  </text>
-</svg>
-
-<!-- Contenido principal -->
-<div
-  class="relative z-10 flex min-h-dvh w-full items-center justify-center px-4 py-10 font-body"
->
-  <div class="w-full max-w-[420px]">
-    <!-- ════ BLOQUE DE TEZONTLE ════ -->
+  <div class="w-full max-w-[380px]">
     <div
-      class="relative w-full border-2 border-[#c9a84c] pb-7 shadow-[0_0_0_4px_#3d1208,0_0_0_6px_rgba(201,168,76,0.12),inset_2px_2px_8px_rgba(0,0,0,0.6),0_8px_40px_rgba(0,0,0,0.8),0_0_60px_rgba(168,50,21,0.1)]"
-      style="
-        background-color: #3d1208;
-        background-image:
-          url(&quot;data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='turbulence' baseFrequency='0.7' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0.3'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)' opacity='0.2'/%3E%3C/svg%3E&quot;),
-          linear-gradient(160deg, #521a0c 0%, #3d1208 50%, #2d0d06 100%);
-        clip-path: polygon(
-          16px 0,
-          calc(100% - 16px) 0,
-          100% 16px,
-          100% calc(100% - 16px),
-          calc(100% - 16px) 100%,
-          16px 100%,
-          0 calc(100% - 16px),
-          0 16px
-        );
-      "
+      class="rounded-2xl border border-[#c9a84c]/30 bg-[#2d0d06] p-8 shadow-[0_20px_60px_rgba(0,0,0,0.5)]"
     >
-      <!-- Triángulos decorativos en esquinas -->
+      <!-- Emblema simple -->
       <div
-        class="absolute left-0 top-0 h-5 w-5 bg-[#c9a84c] opacity-50"
-        style="clip-path: polygon(0 0, 100% 0, 0 100%)"
-      ></div>
-      <div
-        class="absolute right-0 top-0 h-5 w-5 bg-[#c9a84c] opacity-50"
-        style="clip-path: polygon(100% 0, 0 0, 100% 100%)"
-      ></div>
-      <div
-        class="absolute left-0 bottom-0 h-5 w-5 bg-[#c9a84c] opacity-50"
-        style="clip-path: polygon(0 0, 0 100%, 100% 100%)"
-      ></div>
-      <div
-        class="absolute right-0 bottom-0 h-5 w-5 bg-[#c9a84c] opacity-50"
-        style="clip-path: polygon(100% 0, 0 100%, 100% 100%)"
-      ></div>
-
-      <!-- Friso greca superior -->
-      <div
-        class="h-[16px] w-full overflow-hidden bg-[#2d0d06]"
-        style="
-          background-image: url(&quot;data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='32' height='16'%3E%3Cpath d='M0 16V0h8v8h8V0h8v8h8v8' fill='none' stroke='%23c9a84c' stroke-width='1.5' opacity='0.6'/%3E%3C/svg%3E&quot;);
-          background-repeat: repeat-x;
-          background-size: 32px 16px;
-        "
-      ></div>
-
-      <!-- Cabecera -->
-      <div class="px-7 pt-7 pb-5 text-center">
-        <!-- Ojo solar giratorio -->
-        <div
-          class="mx-auto mb-4 flex h-[60px] w-[60px] items-center justify-center"
-        >
-          <svg
-            style="animation: girar-lento 20s linear infinite"
-            width="60"
-            height="60"
-            viewBox="0 0 60 60"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <circle
-              cx="30"
-              cy="30"
-              r="28"
-              fill="none"
-              stroke="#c9a84c"
-              stroke-width="1.5"
-              opacity="0.7"
-            />
-            <g fill="#c9a84c" opacity="0.8">
-              <rect x="28.5" y="1" width="3" height="7" rx="0.5" />
-              <rect
-                x="28.5"
-                y="1"
-                width="3"
-                height="7"
-                rx="0.5"
-                transform="rotate(45 30 30)"
-              />
-              <rect
-                x="28.5"
-                y="1"
-                width="3"
-                height="7"
-                rx="0.5"
-                transform="rotate(90 30 30)"
-              />
-              <rect
-                x="28.5"
-                y="1"
-                width="3"
-                height="7"
-                rx="0.5"
-                transform="rotate(135 30 30)"
-              />
-              <rect
-                x="28.5"
-                y="1"
-                width="3"
-                height="7"
-                rx="0.5"
-                transform="rotate(180 30 30)"
-              />
-              <rect
-                x="28.5"
-                y="1"
-                width="3"
-                height="7"
-                rx="0.5"
-                transform="rotate(225 30 30)"
-              />
-              <rect
-                x="28.5"
-                y="1"
-                width="3"
-                height="7"
-                rx="0.5"
-                transform="rotate(270 30 30)"
-              />
-              <rect
-                x="28.5"
-                y="1"
-                width="3"
-                height="7"
-                rx="0.5"
-                transform="rotate(315 30 30)"
-              />
-            </g>
-            <circle
-              cx="30"
-              cy="30"
-              r="16"
-              fill="none"
-              stroke="#c9a84c"
-              stroke-width="1"
-              opacity="0.5"
-            />
-            <path
-              d="M22 22 h4 v4 h4 v-4 h4 v4 h4 v4 h-4 v4 h-4 v-4 h-4 v4 h-4 v-8 h4z"
-              fill="none"
-              stroke="#c9a84c"
-              stroke-width="0.8"
-              opacity="0.5"
-            />
-            <circle cx="30" cy="30" r="5" fill="#c9a84c" opacity="0.7" />
-            <circle cx="30" cy="30" r="3" fill="#521a0c" />
-          </svg>
-        </div>
-
-        <h1
-          class="font-display text-[15px] font-black uppercase tracking-[0.12em] leading-snug text-[#e2c97e]"
-          style="
-            text-shadow:
-              0 0 20px rgba(201, 168, 76, 0.4),
-              0 2px 4px rgba(0, 0, 0, 0.9);
-          "
-        >
-          Inicio de Sesión
-        </h1>
-        <p
-          class="mt-1.5 text-[11px] italic tracking-[0.06em] text-[rgba(232,223,192,0.5)]"
-        >
-          Tlazohcamati — Bienvenido
-        </p>
+        class="mx-auto mb-5 flex h-12 w-12 items-center justify-center rounded-full border border-[#c9a84c]/50"
+      >
+        <span class="text-xl text-[#c9a84c]" aria-hidden="true">☀</span>
       </div>
+      <h1
+        class="text-center font-display text-base font-bold uppercase tracking-wide text-[#e2c97e]"
+      >
+        Inicio de Sesión
+      </h1>
+      <p class="mt-1 text-center text-xs italic text-[#e8dfc0]/50">
+        Tlazohcamati
+      </p>
 
-      <!-- Línea interior dorada -->
-      <div
-        class="mx-6 h-px opacity-35"
-        style="
-          background: linear-gradient(
-            90deg,
-            transparent,
-            #c9a84c 20%,
-            #c9a84c 80%,
-            transparent
-          );
-        "
-      ></div>
+      <!-- Banner de error -->
+      @if (errorMessage) {
+        <div
+          role="alert"
+          class="mt-5 rounded-lg border border-red-500/30 bg-red-900/20 px-3 py-2 text-xs text-red-200"
+        >
+          {{ errorMessage }}
+        </div>
+      }
 
-      <!-- Formulario -->
-      <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="px-7 pt-6">
+      <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="mt-6 space-y-5">
         <!-- Email -->
-        <div class="mb-7">
+        <div>
           <label
-            class="mb-2 block font-display text-[9px] uppercase tracking-[0.14em] text-[rgba(201,168,76,0.6)]"
             for="email"
-            style="text-shadow: 0 1px 2px rgba(0, 0, 0, 0.8)"
+            class="mb-1.5 block text-[10px] uppercase tracking-wide text-[#c9a84c]/70"
           >
             Correo electrónico
           </label>
           <input
             id="email"
-            class="w-full border-b border-b-[rgba(201,168,76,0.25)] border-t border-t-[rgba(0,0,0,0.4)] bg-transparent px-2.5 py-2.5 text-[15px] text-[#e8dfc0] outline-none font-body tracking-[0.03em] caret-[#c9a84c] placeholder-[rgba(232,223,192,0.2)] placeholder:italic shadow-[inset_0_2px_4px_rgba(0,0,0,0.5)] transition-all duration-300 focus:border-b-[#c9a84c] focus:bg-[rgba(201,168,76,0.04)] focus:shadow-[inset_0_2px_4px_rgba(0,0,0,0.5),0_3px_12px_rgba(201,168,76,0.12)]"
             type="email"
-            name="email"
             formControlName="email"
+            autocomplete="email"
+            [disabled]="isLoading"
             placeholder="usuario@correo.com"
-            autocomplete="off"
+            class="w-full rounded-lg border border-[#c9a84c]/25 bg-black/20 px-3 py-2.5 text-sm text-[#e8dfc0] outline-none transition focus:border-[#c9a84c] focus:bg-black/30 disabled:opacity-50"
           />
+          @if (loginForm.get('email')?.invalid && loginForm.get('email')?.touched) {
+            <p class="mt-1 text-[11px] text-red-300">
+              Ingresa un correo válido.
+            </p>
+          }
         </div>
 
         <!-- Password -->
-        <div class="mb-8">
+        <div>
           <label
-            class="mb-2 block font-display text-[9px] uppercase tracking-[0.14em] text-[rgba(201,168,76,0.6)]"
             for="password"
-            style="text-shadow: 0 1px 2px rgba(0, 0, 0, 0.8)"
+            class="mb-1.5 block text-[10px] uppercase tracking-wide text-[#c9a84c]/70"
           >
             Contraseña
           </label>
           <input
             id="password"
-            class="w-full border-b border-b-[rgba(201,168,76,0.25)] border-t border-t-[rgba(0,0,0,0.4)] bg-transparent px-2.5 py-2.5 text-[15px] text-[#e8dfc0] outline-none font-body tracking-[0.03em] caret-[#c9a84c] placeholder-[rgba(232,223,192,0.2)] placeholder:italic shadow-[inset_0_2px_4px_rgba(0,0,0,0.5)] transition-all duration-300 focus:border-b-[#c9a84c] focus:bg-[rgba(201,168,76,0.04)] focus:shadow-[inset_0_2px_4px_rgba(0,0,0,0.5),0_3px_12px_rgba(201,168,76,0.12)]"
             type="password"
-            name="password"
             formControlName="password"
+            autocomplete="current-password"
+            [disabled]="isLoading"
             placeholder="••••••••"
+            class="w-full rounded-lg border border-[#c9a84c]/25 bg-black/20 px-3 py-2.5 text-sm text-[#e8dfc0] outline-none transition focus:border-[#c9a84c] focus:bg-black/30 disabled:opacity-50"
           />
+          @if (loginForm.get('password')?.invalid && loginForm.get('password')?.touched) {
+            <p class="mt-1 text-[11px] text-red-300">
+              La contraseña es obligatoria.
+            </p>
+          }
         </div>
 
         <!-- Botón principal -->
         <button
           type="submit"
-          class="mb-5 w-full cursor-pointer border border-[#c9a84c] border-b-[3px] border-b-[#2d0d06] px-4 py-3 font-display text-[11px] font-bold uppercase tracking-[0.14em] text-[#e2c97e] shadow-[inset_0_1px_0_rgba(255,255,255,0.06),0_4px_12px_rgba(0,0,0,0.6)] transition-all duration-200 hover:text-white hover:shadow-[0_0_24px_rgba(168,50,21,0.35),0_4px_12px_rgba(0,0,0,0.7),inset_0_1px_0_rgba(255,255,255,0.1)] active:scale-[0.98] active:shadow-[inset_0_3px_8px_rgba(0,0,0,0.7)]"
-          style="
-            background-image: linear-gradient(
-              160deg,
-              #7a2c14 0%,
-              #521a0c 60%,
-              #3d1208 100%
-            );
-            clip-path: polygon(
-              8px 0,
-              calc(100% - 8px) 0,
-              100% 8px,
-              100% 100%,
-              calc(100% - 8px) 100%,
-              8px 100%,
-              0 calc(100% - 8px),
-              0 0
-            );
-            text-shadow: 0 1px 4px rgba(0, 0, 0, 0.8);
-          "
-          onmouseover="
-            this.style.backgroundImage =
-              'linear-gradient(160deg,#c03a18 0%,#8b2a15 100%)'
-          "
-          onmouseout="
-            this.style.backgroundImage =
-              'linear-gradient(160deg,#7a2c14 0%,#521a0c 60%,#3d1208 100%)'
-          "
+          [disabled]="isLoading"
+          [attr.aria-busy]="isLoading"
+          class="flex w-full items-center justify-center gap-2 rounded-lg bg-gradient-to-b from-[#7a2c14] to-[#3d1208] px-4 py-3 text-xs font-bold uppercase tracking-wide text-[#e2c97e] transition hover:from-[#8b2a15] disabled:cursor-not-allowed disabled:opacity-70"
         >
-          Iniciar Sesión
+          @if (isLoading) {
+            <span
+              class="h-3.5 w-3.5 animate-spin rounded-full border-2 border-[#e2c97e]/30 border-t-[#e2c97e]"
+              aria-hidden="true"
+            ></span>
+          }
+          <span>{{ isLoading ? 'Iniciando sesión…' : 'Iniciar sesión' }}</span>
         </button>
+
+        <!-- Aviso de conexión lenta -->
+        @if (isSlow) {
+          <p aria-live="polite" class="text-center text-[11px] text-[#e8dfc0]/50">
+            Esto está tardando más de lo usual, seguimos intentando…
+          </p>
+        }
 
         <!-- Link registro -->
         <div class="text-center">
           <a
             routerLink="../signup"
-            class="font-display text-[9.5px] uppercase tracking-[0.1em] text-[rgba(201,168,76,0.4)] no-underline transition-all duration-200 hover:text-[#e2c97e] hover:[text-shadow:0_0_12px_rgba(201,168,76,0.4)]"
+            class="text-[11px] text-[#c9a84c]/60 no-underline transition hover:text-[#e2c97e]"
           >
-            ¿Aún no estás registrado? Registrarse
+            ¿Aún no tienes cuenta? Regístrate
           </a>
         </div>
       </form>
     </div>
-
-    <!-- Sello inferior -->
-    <p
-      class="mt-5 text-center font-display text-[8px] uppercase tracking-[0.2em] text-[rgba(201,168,76,0.2)]"
-    >
-      In Ixtli In Yóllotl — Rostro y Corazón
-    </p>
   </div>
 </div>
