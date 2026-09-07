@@ -13,6 +13,8 @@ import { CryptoService } from 'src/app/data/services/crypto.service';
 export class NewChatModalComponent implements OnInit {
   @Output() closeModalEvent = new EventEmitter();
   isLoading = false;
+  errorMessage: string | null = null;
+  readonly nombresSugeridos = ['Familia', 'Trabajo', 'Proyecto X'];
 
   constructor(
     private api: ApiService,
@@ -23,18 +25,19 @@ export class NewChatModalComponent implements OnInit {
 
   async onSubmitChat(name: string) {
     if (!name.trim()) {
-      alert('El formulario no es valido');
+      this.errorMessage = 'Escribe un nombre para tu chat';
       return;
     }
 
     this.isLoading = true;
+    this.errorMessage = null;
 
     try {
       // 1. Obtener perfil para acceder a la PublicKey propia
       const profile = await firstValueFrom(this.api.getUserProfile());
 
       if (!profile.publicKey) {
-        alert('No tienes claves E2EE registradas');
+        this.errorMessage = 'No tienes claves E2EE registradas';
         return;
       }
 
@@ -58,7 +61,7 @@ export class NewChatModalComponent implements OnInit {
       await firstValueFrom(this.api.postChat(data));
       this.closeModal();
     } catch (error) {
-      alert('No se pudo registrar el chat');
+      this.errorMessage = 'No se pudo crear el chat, intenta de nuevo';
       console.error(error);
     } finally {
       this.isLoading = false;

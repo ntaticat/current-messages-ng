@@ -1,114 +1,70 @@
-<div
-  class="fixed inset-0 flex items-center justify-center z-50"
-  style="
-    background: rgba(8, 5, 3, 0.92);
-    background-image: repeating-linear-gradient(
-      45deg,
-      rgba(180, 90, 48, 0.06) 0px,
-      rgba(180, 90, 48, 0.06) 1px,
-      transparent 1px,
-      transparent 12px
-    );
-  "
->
-  <div
-    class="w-[360px] rounded-sm overflow-hidden relative"
-    style="
-      background: #161210;
-      border: 0.5px solid rgba(180, 90, 48, 0.25);
-      font-family: &quot;DM Sans&quot;, sans-serif;
-    "
-  >
-    <!-- Franja decorativa -->
+<div class="fixed inset-0 z-50 flex items-center justify-center bg-black/70 px-4">
+  <div class="relative w-full max-w-[380px] overflow-hidden rounded-2xl border border-[#f0a500]/20 bg-gradient-to-br from-[#3d2010] to-[#2a1a0e] shadow-xl font-sans">
+    <!-- Textura, igual que las tarjetas de chat -->
     <div
-      class="h-1 w-full"
-      style="
-        background: linear-gradient(
-          90deg,
-          #b45a30 0%,
-          #d4841c 33%,
-          #b45a30 66%,
-          #7c2020 100%
-        );
-      "
+      class="pointer-events-none absolute inset-0 opacity-[0.04]"
+      style="background-image: radial-gradient(circle at 20% 20%, #f0a500 0%, transparent 60%);"
     ></div>
 
     <!-- Encabezado -->
-    <div
-      class="px-7 pt-7 pb-5 relative"
-      style="border-bottom: 0.5px solid rgba(255, 255, 255, 0.06)"
-    >
-      <span
-        class="text-[11px] font-medium tracking-[0.18em] uppercase"
-        style="color: #c46a38"
-      >
-        Nuevo chat
-      </span>
-      <h2
-        class="mt-1.5 mb-1 text-[22px] font-normal leading-snug"
-        style="font-family: &quot;Playfair Display&quot;, serif; color: #f0eae4"
-      >
-        Dale una identidad
-      </h2>
-      <p class="text-[13px] font-light m-0" style="color: #7a6e68">
-        Nombra tu conversación para encontrarla después
+    <div class="relative border-b border-[#f0a500]/12 px-6 pt-6 pb-4">
+      <p class="text-[10px] uppercase tracking-[0.12em] text-[#f0a500]/60">Nuevo chat</p>
+      <h2 class="mt-1 font-display text-xl font-bold text-[#f5ede0]">Dale una identidad</h2>
+      <p class="mt-1 text-[12px] leading-relaxed text-[#f5ede0]/45">
+        Este nombre solo te ayuda a encontrar la conversación en tu lista.
       </p>
-      <span
-        class="absolute top-5 right-6 text-[48px] leading-none select-none"
-        style="color: #d4841c; opacity: 0.12"
-        >✦</span
-      >
     </div>
 
     <!-- Cuerpo -->
-    <div class="px-7 py-6">
-      <label
-        class="block text-[11px] font-medium tracking-[0.12em] uppercase mb-2"
-        style="color: #5a524e"
-      >
+    <div class="relative px-6 py-5">
+      <label class="mb-2 block text-[11px] uppercase tracking-[0.1em] text-[#f0a500]/50">
         Nombre del chat
       </label>
       <input
         type="text"
         #chatInput
-        placeholder="Ej: Proyecto Alpha..."
+        placeholder="Ej: Proyecto Alpha"
         autocomplete="off"
-        class="w-full text-[14px] font-light rounded-sm px-3.5 py-2.5 outline-none transition-all duration-200 placeholder:italic"
-        style="
-          background: #0e0c0a;
-          color: #e8ddd6;
-          border: 0.5px solid rgba(255, 255, 255, 0.08);
-          placeholder-color: #3a3330;
-        "
-        (focus)="
-          $event.target.style.borderColor = '#B45A30';
-          $event.target.style.boxShadow = '0 0 0 2px rgba(180,90,48,0.15)'
-        "
-        (blur)="
-          $event.target.style.borderColor = 'rgba(255,255,255,0.08)';
-          $event.target.style.boxShadow = 'none'
-        "
+        [disabled]="isLoading"
+        (keyup.enter)="onSubmitChat(chatInput.value)"
+        (input)="errorMessage = null"
+        class="w-full rounded-xl border px-3.5 py-2.5 text-[14px] font-light text-[#e8ddd6] outline-none transition-colors placeholder:italic placeholder:text-[#3a3330] disabled:opacity-50"
+        [style.background]="'#0e0c0a'"
+        [style.borderColor]="errorMessage ? '#c0392b' : 'rgba(255,255,255,0.08)'"
       />
+      @if (errorMessage) {
+        <p class="mt-1.5 text-[11px] text-[#e0685a]">{{ errorMessage }}</p>
+      }
+
+      <!-- Ejemplos: dejan claro que es un nombre libre -->
+      <div class="mt-3 flex flex-wrap gap-1.5">
+        @for (ejemplo of nombresSugeridos; track ejemplo) {
+          <button
+            type="button"
+            (click)="chatInput.value = ejemplo; chatInput.focus(); errorMessage = null"
+            class="rounded-full border border-[#f0a500]/20 bg-[#f0a500]/5 px-2.5 py-1 text-[11px] text-[#f0a500]/70 transition-colors hover:bg-[#f0a500]/12"
+          >
+            {{ ejemplo }}
+          </button>
+        }
+      </div>
     </div>
 
     <!-- Pie -->
-    <div
-      class="px-7 pb-6 pt-4 flex justify-end gap-2.5"
-      style="border-top: 0.5px solid rgba(255, 255, 255, 0.06)"
-    >
+    <div class="relative flex justify-end gap-2 border-t border-[#f0a500]/12 px-6 py-4">
       <button
         (click)="closeModal()"
-        class="px-[18px] py-2 text-[13px] font-normal tracking-wide rounded-sm bg-transparent transition-all duration-150"
-        style="color: #7a6e68; border: 0.5px solid rgba(255, 255, 255, 0.1)"
+        [disabled]="isLoading"
+        class="rounded-lg px-4 py-2 text-[13px] text-[#f5ede0]/50 transition-colors hover:bg-white/5 disabled:opacity-40"
       >
         Cancelar
       </button>
       <button
         (click)="onSubmitChat(chatInput.value)"
-        class="px-[22px] py-2 text-[13px] font-medium tracking-[0.1em] uppercase rounded-sm transition-all duration-150 active:scale-[0.98]"
-        style="background: #b45a30; color: #fff5ee; border: none"
+        [disabled]="isLoading"
+        class="rounded-lg bg-[#1a6b3c] px-4 py-2 text-[13px] font-bold uppercase tracking-[0.06em] text-white transition-colors hover:bg-[#145c32] active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-50"
       >
-        Crear
+        {{ isLoading ? 'Creando...' : 'Crear' }}
       </button>
     </div>
   </div>

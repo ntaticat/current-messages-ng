@@ -63,6 +63,7 @@ export class ChatsPageComponent implements OnInit, AfterViewInit {
     encryptedPrivateKey: '',
   });
   showNewChatModal = signal<boolean>(false);
+  idCopied = signal(false);
 
   ngOnInit(): void {
     this.getUserProfile();
@@ -70,7 +71,8 @@ export class ChatsPageComponent implements OnInit, AfterViewInit {
   }
 
   onClickCopyId(): void {
-    alert('Se ha copiado el Id en el portapapeles');
+    this.idCopied.set(true);
+    setTimeout(() => this.idCopied.set(false), 2000);
   }
 
   toggleShowNewChatModal(): void {
@@ -100,7 +102,7 @@ export class ChatsPageComponent implements OnInit, AfterViewInit {
 
   ordenarChatsPorFecha(chats: IChat[]): IChat[] {
     return [...chats].sort((a, b) => {
-      return new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime();
+      return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
     });
   }
 
